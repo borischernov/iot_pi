@@ -4,10 +4,12 @@ require 'bundler'
 Bundler.require
 
 require 'sinatra'
-require_relative 'models/init'
 
-get '/' do
-  @sensors = Sensor.all
-  erb :index
-end
+require 'sinatra/form_helpers'
+
+require_relative 'models/init'
+require_relative 'controllers/init'
+
+
+
 

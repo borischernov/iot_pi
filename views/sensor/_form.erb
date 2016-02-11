@@ -1,0 +1,25 @@
+<%= form("/sensor/edit/#{@sensor.id}", :post) %>
+  <% if @sensor.errors.any? %>
+    <div id="error_explanation">
+      <ul>
+      <% @sensor.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset class="form-group">
+	<%= label :sensor, :ident %><br>
+    <%= input :sensor, :ident, :value => @sensor.ident, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :sensor, :name %><br>
+    <%= input :sensor, :name, :value => @sensor.name, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :sensor, :sensor_type %><br>
+    <%= select :sensor, :sensor_type, Sensor.sensor_types.keys.to_a, :value => @sensor.sensor_type, :class =>"form-control" %>
+  </fieldset>
+  <%= submit "Save", :class => "btn btn-primary" %>
+</form>

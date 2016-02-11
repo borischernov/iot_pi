@@ -5,3 +5,4 @@ gem "sinatra"
 gem "sqlite3"
 gem "activerecord"
 gem "thin"
+gem 'sinatra-formhelpers-ng'
