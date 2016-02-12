@@ -56,13 +56,15 @@ class FirmwareLoader
   
   def serial_line(line)
     @s.serial_puts("#{line}\n")
-    status(serial_read.strip)
+    status(serial_read)
   end
   
   def serial_read
     str = ""
-    while (@s.serial_data_avail > 0)
-      str += @s.serial_get_char.chr
+    loop do
+      chr = @s.serial_get_char.chr
+      break if chr == "\n"
+      str += chr
     end
     str
   end
