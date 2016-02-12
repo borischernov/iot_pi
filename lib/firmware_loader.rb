@@ -1,61 +1,84 @@
-module FirmwareLoader
+require 'wiringpi'
+
+class FirmwareLoader
   PIN_RESET = 0
   PIN_GPIO0 = 1
   APP_ROOT = File.join(File.dirname(__FILE__), '..') 
   
-  def self.flash_nodemcu
+  def initialize
+    @io = WiringPi::GPIO.new do |gpio|
+      gpio.pin_mode(PIN_RESET, WiringPi::OUTPUT)
+      gpio.pin_mode(PIN_GPIO0, WiringPi::OUTPUT)
+    end
+  end
+  
+  def flash_nodemcu
     # enter bootloader
-    self.status("Entering bootloader mode")
-    self.setup_gpio(PIN_RESET, :out)    
-    self.setup_gpio(PIN_GPIO0, :out)
-    self.gpio_out(PIN_GPIO0, 0)
-    self.gpio_out(PIN_RESET, 0)
-    sleep(0.1)
-    self.gpio_out(PIN_RESET, 1)
+    status("Entering bootloader mode")
+    reset_esp(WiringPi::LOW)
     
     # check MAC
-    self.status("Checking connectivity")
+    status("Checking connectivity")
     unless self.esptool("read_mac").include?("MAC:")
-      self.status("Failed to connect to ESP8266")
+      status("Failed to connect to ESP8266")
       return false
     end    
     
     # flash NodeMCU
-    self.status("Flashing NodeMCU")
+    status("Flashing NodeMCU")
     fw_file = File.join(APP_ROOT, '/firmware/nodemcu/nodemcu.bin')
     unless self.esptool("write_flash 0x00000 #{fw_file}").include?("Wrote")
-      self.status("Failed to flash NodeMCU")
+      status("Failed to flash NodeMCU")
       return false
     end
     
     # resetting in normal mode
-    self.gpio_out(PIN_GPIO0, 1)
-    self.gpio_out(PIN_RESET, 0)
-    sleep(0.1)
-    self.gpio_out(PIN_RESET, 1)
+    reset_esp(WiringPi::HIGH)
 
-    self.status("Done flashing firmware")
+    status("Done flashing firmware")
 
     true
   end
   
+  def send_file(file_name, file_data)
+    @s = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
+    serial_line("file.remove(\"#{file_name}\");")
+    serial_line("file.open(\"#{file_name}\",\"w+\");")
+    serial_line("w = file.writeline;")
+    file_data.each_line do |line|
+      serial_line("w([[#{line.chomp}]]);")
+    end
+    serial_line("file.close();")
+    @s.serial_close
+  end
+  
   private
   
-  def self.status(str)
+  def serial_line(line)
+    @s.serial_puts("#{line}\n")
+    status(serial_read.strip)
+  end
+  
+  def serial_read
+    str = ""
+    while (@s.serial_data_avail > 0)
+      str += @s.serial_get_char.chr
+    end
+    str
+  end
+  
+  def status(str)
     puts str
   end
   
-  def self.setup_gpio(num, dir)
-    num = num.to_i
-    File.open("/sys/class/gpio/export", 'w') { |f| f.puts num }
-    File.open("/sys/class/gpio/gpio#{num}/direction", 'w') { |f| f.puts dir.to_s }
-  end
-
-  def self.gpio_out(num, val)
-    File.open("/sys/class/gpio/gpio#{num}/value", 'w') { |f| f.puts val.to_i }
+  def reset_esp(gpio0)
+    @io.digital_write(PIN_GPIO0, gpio0)
+    @io.digital_write(PIN_RESET, WiringPi::LOW)
+    sleep(0.1)
+    @io.digital_write(PIN_RESET, WiringPi::HIGH)
   end
   
-  def self.esptool(args)
+  def esptool(args)
     esptool = File.join(APP_ROOT, '/bin/esptool.py')
     `#{esptool} --port /dev/ttyAMA0 #{args}`
   end
