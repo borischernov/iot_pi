@@ -3,7 +3,7 @@ module FirmwareLoader
   PIN_GPIO0 = 1
   APP_ROOT = File.join(File.dirname(__FILE__), '..') 
   
-  def flash_nodemcu
+  def self.flash_nodemcu
     # enter bootloader
     self.status("Entering bootloader mode")
     self.setup_gpio(PIN_RESET, :out)    
