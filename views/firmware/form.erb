@@ -18,7 +18,7 @@
   </fieldset>
   <fieldset class="form-group">
     <%= label :firmware, nil %><br>
-    <%= select :firmware, nil, @firmwares, :value => params[:firmware], :class =>"form-control" %>
+    <%= select :firmware, nil, @firmwares, :value => params[:firmware], :class =>"form-control", :name => 'firmware' %>
   </fieldset>
   <%= submit "Upload", :class => "btn btn-primary" %>
 </form>
