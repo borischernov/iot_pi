@@ -102,10 +102,13 @@ class FirmwareLoader
   def esptool(args)
     esptool = File.join(APP_ROOT, '/bin/esptool.py')
     out = ""
-    IO.popen("#{esptool} --port /dev/ttyAMA0 #{args}") do |io| 
-      line = io.gets
-      out += line
-      status(line) 
+    IO.popen("#{esptool} --port /dev/ttyAMA0 #{args}") do |io|
+      loop do 
+        line = io.gets rescue nil
+        break unless line
+        out += line
+        status(line)
+      end 
     end
     out
   end
