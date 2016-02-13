@@ -57,10 +57,11 @@ class FirmwareLoader
     reset_esp(1)
 
     @params = params
+    b = binding
     files.each do |file|
       path = File.join(fw_dir, "#{file}.erb")
       erb = ERB.new(File.read(path))
-      result = erb.result
+      result = erb.result(b)
       send_file(file, result)
     end
 
