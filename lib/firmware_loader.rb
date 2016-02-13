@@ -58,7 +58,7 @@ class FirmwareLoader
     status("Uploading scripts ...")
 
     reset_esp(1)
-    sleep(2)
+    sleep(5)
 
     @params = params
     b = binding
