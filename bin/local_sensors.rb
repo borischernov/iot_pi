@@ -33,3 +33,5 @@ module LocalSensors
     end
   end
 end
+
+LocalSensors.poll_local_sensors
