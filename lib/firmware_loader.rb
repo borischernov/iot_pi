@@ -43,7 +43,6 @@ class FirmwareLoader
   
   def send_file(file_name, file_data)
     @s = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
-    serial_read(false)
     serial_line("file.remove(\"#{file_name}\");")
     serial_line("file.open(\"#{file_name}\",\"w+\");")
     serial_line("w = file.writeline;")
@@ -55,8 +54,11 @@ class FirmwareLoader
   end
   
   def send_firmware(fw_dir, files, params)
+    status("Uploading scripts ...")
     reset_esp(1)
-    sleep(1)
+    sleep(2)
+    serial_read(false)
+
     @params = params
     b = binding
     files.each do |file|
