@@ -1,6 +1,6 @@
 #/usr/bin/ruby
 
-require File.join(File.dirname(__FILE__), '../models/init')
+require 'models/init'
 
 module LocalSensors
   def self.poll_local_sensors
