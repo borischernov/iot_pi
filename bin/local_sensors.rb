@@ -1,4 +1,6 @@
-require_relative '../models/init'
+#/usr/bin/ruby
+
+require '../models/init'
 
 module LocalSensors
   def self.poll_local_sensors
