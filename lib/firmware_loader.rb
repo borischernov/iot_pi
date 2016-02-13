@@ -43,6 +43,7 @@ class FirmwareLoader
   
   def send_file(file_name, file_data)
     @s = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
+    @s.serial_read(false)
     serial_line("file.remove(\"#{file_name}\");")
     serial_line("file.open(\"#{file_name}\",\"w+\");")
     serial_line("w = file.writeline;")
@@ -75,13 +76,13 @@ class FirmwareLoader
     status(serial_read)
   end
   
-  def serial_read
+  def serial_read(line = true)
     str = ""
     loop do
       c = @s.serial_get_char
       break if c <= 0
       chr = c.chr
-      break if chr == "\n"
+      break if chr == "\n" && line
       str += chr
     end
     str
