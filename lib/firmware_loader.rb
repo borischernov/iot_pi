@@ -5,11 +5,13 @@ class FirmwareLoader
   PIN_GPIO0 = 1
   APP_ROOT = File.join(File.dirname(__FILE__), '..') 
   
-  def initialize
+  def initialize(logger = nil)
     @io = WiringPi::GPIO.new do |gpio|
       gpio.pin_mode(PIN_RESET, WiringPi::OUTPUT)
       gpio.pin_mode(PIN_GPIO0, WiringPi::OUTPUT)
     end
+
+    @logger = logger 
   end
   
   def flash_nodemcu
@@ -52,6 +54,20 @@ class FirmwareLoader
     @s.serial_close
   end
   
+  def send_firmware(fw_dir, files, params)
+    reset_esp(WiringPi::HIGH)
+
+    @params = params
+    files.each do |file|
+      path = File.join(fw_dir, "#{file}.erb")
+      erb = ERB.new(File.read(path))
+      result = erb.result
+      send_file(file, result)
+    end
+
+    reset_esp(WiringPi::HIGH)
+  end
+  
   private
   
   def serial_line(line)
@@ -70,7 +86,11 @@ class FirmwareLoader
   end
   
   def status(str)
-    puts str
+    if @logger
+      @logger.call(str)
+    else
+      puts str      
+    end
   end
   
   def reset_esp(gpio0)

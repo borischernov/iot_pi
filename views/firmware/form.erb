@@ -1,0 +1,24 @@
+<%= form("/firmware", :post) %>
+
+  <fieldset class="form-group">
+	<%= label :settings, :host %><br>
+    <%= input :settings, :host, :value => @settings['host'], :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :settings, :port %><br>
+    <%= input :settings, :port, :value => @settings['port'], :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :settings, :ssid %><br>
+    <%= input :settings, :ssid, :value => @settings['ssid'], :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :settings, :password %><br>
+    <%= input :settings, :password, :value => @settings['password'], :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :firmware, nil %><br>
+    <%= select :firmware, nil, @firmwares, :value => params[:firmware], :class =>"form-control" %>
+  </fieldset>
+  <%= submit "Upload", :class => "btn btn-primary" %>
+</form>
