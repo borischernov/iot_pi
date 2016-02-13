@@ -5,8 +5,11 @@ ActiveRecord::Base.establish_connection(
   :database =>  File.join(File.dirname(__FILE__),'../db','db.sqlite3')
 )
 
-after do
-  ActiveRecord::Base.connection.close
+begin
+  after do
+    ActiveRecord::Base.connection.close
+  end
+rescue
 end
 
 require_relative 'sensor'
