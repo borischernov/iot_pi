@@ -83,7 +83,7 @@ class FirmwareLoader
     str = ""
     loop do
       c = @s.serial_get_char
-      continue if c <= 0
+      break if c <= 0
       chr = c.chr
       break if chr == (line ? "\n" : ">")
       str += chr
