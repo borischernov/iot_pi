@@ -21,7 +21,7 @@ class FirmwareLoader
     
     # check MAC
     status("Checking connectivity")
-    unless self.esptool("read_mac").include?("MAC:")
+    unless esptool("read_mac").include?("MAC:")
       status("Failed to connect to ESP8266")
       return false
     end    
@@ -29,7 +29,7 @@ class FirmwareLoader
     # flash NodeMCU
     status("Flashing NodeMCU")
     fw_file = File.join(APP_ROOT, '/firmware/nodemcu/nodemcu.bin')
-    unless self.esptool("write_flash 0x00000 #{fw_file}").include?("Wrote")
+    unless esptool("write_flash 0x00000 #{fw_file}").include?("Wrote")
       status("Failed to flash NodeMCU")
       return false
     end
