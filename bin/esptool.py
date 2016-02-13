@@ -642,7 +642,7 @@ def main():
             written = 0
             t = time.time()
             while len(image) > 0:
-                print '\rWriting at 0x%08x... (%d %%)' % (address + seq * esp.ESP_FLASH_BLOCK, 100 * (seq + 1) / blocks),
+                print '\nWriting at 0x%08x... (%d %%)' % (address + seq * esp.ESP_FLASH_BLOCK, 100 * (seq + 1) / blocks),
                 sys.stdout.flush()
                 block = image[0:esp.ESP_FLASH_BLOCK]
                 # Fix sflash config data

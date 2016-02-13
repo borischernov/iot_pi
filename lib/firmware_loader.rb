@@ -107,7 +107,7 @@ class FirmwareLoader
         line = io.gets rescue nil
         break unless line
         out += line
-        status(line)
+        status(line.strip)
       end 
     end
     out
