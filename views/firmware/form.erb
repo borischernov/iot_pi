@@ -17,8 +17,8 @@
     <%= input :settings, :password, :value => @settings['password'], :class =>"form-control" %>
   </fieldset>
   <fieldset class="form-group">
-    <%= label :firmware, nil %><br>
-    <%= select :firmware, nil, @firmwares, :value => params[:firmware], :class =>"form-control", :name => 'firmware' %>
+    <%= label :firmware, :name %><br>
+    <%= select :firmware, :name, @firmwares, :value => (params[:firmware][:name] rescue nil), :class =>"form-control", :name => 'firmware' %>
   </fieldset>
   <%= submit "Upload", :class => "btn btn-primary" %>
 </form>

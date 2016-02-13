@@ -16,7 +16,7 @@ post '/firmware' do
     out << erb(:'firmware/upload')
     loader = FirmwareLoader.new(lambda { |str| out << "<script type=\"text/javascript\">$('#output').append(#{"#{str}\n".to_json})</script>\n" })
     if loader.flash_nodemcu
-      fw_dir = File.join(APP_ROOT, 'firmware', params[:firmware])
+      fw_dir = File.join(APP_ROOT, 'firmware', params[:firmware][:name])
       cfg = eval(File.read(File.join(fw_dir, 'firmware.rb')))
       loader.send_firmware(fw_dir, cfg['files'], @settings)
     else
