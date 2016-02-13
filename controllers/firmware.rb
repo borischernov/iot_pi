@@ -18,6 +18,10 @@ post '/firmware' do
     if loader.flash_nodemcu
       fw_dir = File.join(APP_ROOT, 'firmware', params[:firmware][:name])
       cfg = eval(File.read(File.join(fw_dir, 'firmware.rb')))
+      puts "AAAAAAAAAAAAAAAAAAAAAAAAAA"
+      puts params.inspect
+      puts "AAAAAAAAAAAAAAAAAAAAAAAAAA"
+      puts cfg.inspect
       loader.send_firmware(fw_dir, cfg['files'], @settings)
     else
       out << "<script type=\"text/javascript\">$('#output').append(\"Failed to upload NodeMCU\")</script>\n"
