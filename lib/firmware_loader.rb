@@ -3,13 +3,12 @@ require 'wiringpi'
 class FirmwareLoader
   PIN_RESET = 0
   PIN_GPIO0 = 1
-  APP_ROOT = File.join(File.dirname(__FILE__), '..') 
   
   def initialize(logger = nil)
-    @io = WiringPi::GPIO.new do |gpio|
-      gpio.pin_mode(PIN_RESET, WiringPi::OUTPUT)
-      gpio.pin_mode(PIN_GPIO0, WiringPi::OUTPUT)
-    end
+    `echo #{PIN_RESET} >/sys/class/gpio/export`
+    `echo #{PIN_GPIO0} >/sys/class/gpio/export`
+    `echo out >/sys/class/gpio/#{PIN_RESET}/direction`
+    `echo out >/sys/class/gpio/#{PIN_GPIO0}/direction`
 
     @logger = logger 
   end
@@ -17,7 +16,7 @@ class FirmwareLoader
   def flash_nodemcu
     # enter bootloader
     status("Entering bootloader mode")
-    reset_esp(WiringPi::LOW)
+    reset_esp(0)
     
     # check MAC
     status("Checking connectivity")
@@ -35,7 +34,7 @@ class FirmwareLoader
     end
     
     # resetting in normal mode
-    reset_esp(WiringPi::HIGH)
+    reset_esp(1)
 
     status("Done flashing firmware")
 
@@ -55,7 +54,7 @@ class FirmwareLoader
   end
   
   def send_firmware(fw_dir, files, params)
-    reset_esp(WiringPi::HIGH)
+    reset_esp(1)
 
     @params = params
     files.each do |file|
@@ -65,7 +64,7 @@ class FirmwareLoader
       send_file(file, result)
     end
 
-    reset_esp(WiringPi::HIGH)
+    reset_esp(1)
   end
   
   private
@@ -94,10 +93,10 @@ class FirmwareLoader
   end
   
   def reset_esp(gpio0)
-    @io.digital_write(PIN_GPIO0, gpio0)
-    @io.digital_write(PIN_RESET, WiringPi::LOW)
+   `echo #{gpio0} >/sys/class/gpio/#{PIN_GPIO0}/value`
+   `echo 0 >/sys/class/gpio/#{PIN_RESET}/value`
     sleep(0.1)
-    @io.digital_write(PIN_RESET, WiringPi::HIGH)
+   `echo 1 >/sys/class/gpio/#{PIN_RESET}/value`
   end
   
   def esptool(args)
