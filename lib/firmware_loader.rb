@@ -7,8 +7,8 @@ class FirmwareLoader
   def initialize(logger = nil)
     `echo #{PIN_RESET} >/sys/class/gpio/export`
     `echo #{PIN_GPIO0} >/sys/class/gpio/export`
-    `echo out >/sys/class/gpio/#{PIN_RESET}/direction`
-    `echo out >/sys/class/gpio/#{PIN_GPIO0}/direction`
+    `echo out >/sys/class/gpio/gpio#{PIN_RESET}/direction`
+    `echo out >/sys/class/gpio/gpio#{PIN_GPIO0}/direction`
 
     @logger = logger 
   end
@@ -93,10 +93,10 @@ class FirmwareLoader
   end
   
   def reset_esp(gpio0)
-   `echo #{gpio0} >/sys/class/gpio/#{PIN_GPIO0}/value`
-   `echo 0 >/sys/class/gpio/#{PIN_RESET}/value`
+   `echo #{gpio0} >/sys/class/gpio/gpio#{PIN_GPIO0}/value`
+   `echo 0 >/sys/class/gpio/gpio#{PIN_RESET}/value`
     sleep(0.1)
-   `echo 1 >/sys/class/gpio/#{PIN_RESET}/value`
+   `echo 1 >/sys/class/gpio/gpio#{PIN_RESET}/value`
   end
   
   def esptool(args)
