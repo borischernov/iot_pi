@@ -36,7 +36,7 @@ class FirmwareLoader
     # resetting in normal mode
     reset_esp(1)
 
-    status("Done flashing firmware")
+    status("Done flashing NodeMCU")
 
     true
   end
@@ -56,7 +56,7 @@ class FirmwareLoader
   
   def send_firmware(fw_dir, files, params)
     reset_esp(1)
-
+    sleep(1)
     @params = params
     b = binding
     files.each do |file|
