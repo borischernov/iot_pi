@@ -1,6 +1,10 @@
 <h1>Dashboard</h1>
 <span class="label label-info"><%= Time.now.to_s %></span>
+<a href="/firmware" class='pull-right btn btn-default'>
+	<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
+</a>
 <br/><br/>
+
 <% @sensors.each do |sensor| %>
 <div class="alert alert-success" role="alert">
   <%= sensor.to_s %>: <strong><%= sensor.last_formatted_value %></strong>

@@ -1,3 +1,4 @@
+<h1>Firmware upload</h1>
 <%= form("/firmware", :post) %>
 
   <fieldset class="form-group">
@@ -21,4 +22,5 @@
     <%= select :firmware, :name, @firmwares, :value => (params[:firmware][:name] rescue nil), :class =>"form-control", :name => 'firmware' %>
   </fieldset>
   <%= submit "Upload", :class => "btn btn-primary" %>
+  <a href='/' class="btn btn-secondary">Cancel</a>
 </form>

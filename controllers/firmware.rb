@@ -14,7 +14,7 @@ post '/firmware' do
   headers "Transfer-Encoding" => "chunked"
   stream do |out|
     out << erb(:'firmware/upload')
-    loader = FirmwareLoader.new(lambda { |str| out << "<script type=\"text/javascript\">$('#output').append(#{"#{str}\n".to_json rescue ""})</script>\n" })
+    loader = FirmwareLoader.new(lambda { |str| out << "<script type=\"text/javascript\">$('#output').append(#{"#{str}\n".to_json rescue ""});window.scrollTo(0,document.body.scrollHeight);</script>\n" })
     if loader.flash_nodemcu
       fw_dir = File.join(APP_ROOT, 'firmware', params[:firmware][:name])
       cfg = eval(File.read(File.join(fw_dir, 'firmware.rb')))

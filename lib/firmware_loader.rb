@@ -1,4 +1,7 @@
-require 'wiringpi'
+begin 
+  require 'wiringpi'
+rescue LoadError
+end
 
 class FirmwareLoader
   PIN_RESET = 0
