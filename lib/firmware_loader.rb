@@ -78,7 +78,9 @@ class FirmwareLoader
   def serial_read
     str = ""
     loop do
-      chr = @s.serial_get_char.chr
+      c = @s.serial_get_char
+      break if c <= 0
+      chr = c.chr
       break if chr == "\n"
       str += chr
     end
