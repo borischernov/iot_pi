@@ -43,7 +43,7 @@ class FirmwareLoader
   
   def send_file(file_name, file_data)
     @s = WiringPi::Serial.new('/dev/ttyAMA0', 9600)
-    @s.serial_read(false)
+    serial_read(false)
     serial_line("file.remove(\"#{file_name}\");")
     serial_line("file.open(\"#{file_name}\",\"w+\");")
     serial_line("w = file.writeline;")
