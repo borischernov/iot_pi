@@ -28,13 +28,10 @@ class FirmwareLoader
     # flash NodeMCU
     status("Flashing NodeMCU")
     fw_file = File.join(APP_ROOT, '/firmware/nodemcu/nodemcu.bin')
-    st = Thread.new { loop { status("."); sleep(1)} }
     unless esptool("write_flash 0x00000 #{fw_file}").include?("Wrote")
-      st.kill
       status("Failed to flash NodeMCU")
       return false
     end
-    st.kill
     
     # resetting in normal mode
     reset_esp(1)
@@ -104,6 +101,6 @@ class FirmwareLoader
   
   def esptool(args)
     esptool = File.join(APP_ROOT, '/bin/esptool.py')
-    `#{esptool} --port /dev/ttyAMA0 #{args}`
+    IO.popen("#{esptool} --port /dev/ttyAMA0 #{args}") { |io| status(io.gets) }
   end
 end
