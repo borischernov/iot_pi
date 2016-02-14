@@ -11,8 +11,12 @@ class Sensor < ActiveRecord::Base
     self.name || self.ident
   end
 
+  def last_reading
+    self.sensor_readings.order('timestamp desc').first
+  end
+
   def last_value
-    r = self.sensor_readings.order('timestamp desc').first
+    r = last_reading
     r ? r.value : nil
   end
 
