@@ -1,6 +1,6 @@
 #/usr/bin/ruby
 
-require './models/init'
+require './app'
 
 module LocalSensors
   def self.poll_local_sensors
