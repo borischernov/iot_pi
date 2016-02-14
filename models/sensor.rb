@@ -2,8 +2,10 @@ class Sensor < ActiveRecord::Base
   has_many :sensor_readings, dependent: :destroy
 
   enum  sensor_type: [ "Temperature" ]
+  enum  ext_service: ["None", "EasyIoT Cloud", "Thingspeak"]
 
   validates :ident, presence: true, uniqueness: true
+  validates :ext_service_ident, presence: { :if => :has_ext_service? }
 
   def to_s
     self.name || self.ident
@@ -23,5 +25,9 @@ class Sensor < ActiveRecord::Base
       else
         v.to_s
     end
+  end
+  
+  def has_ext_service?
+    self.ext_service.to_s != "None"
   end
 end

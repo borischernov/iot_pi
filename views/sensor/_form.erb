@@ -1,6 +1,6 @@
 <%= form("/sensor/edit/#{@sensor.id}", :post) %>
   <% if @sensor.errors.any? %>
-    <div id="error_explanation">
+    <div class="alert alert-danger" role="alert">
       <ul>
       <% @sensor.errors.full_messages.each do |message| %>
         <li><%= message %></li>
@@ -20,6 +20,14 @@
   <fieldset class="form-group">
     <%= label :sensor, :sensor_type %><br>
     <%= select :sensor, :sensor_type, Sensor.sensor_types.keys.to_a, :value => @sensor.sensor_type, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :sensor, :ext_service %><br>
+    <%= select :sensor, :ext_service, Sensor.ext_services.keys.to_a, :value => @sensor.ext_service, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :sensor, :ext_service_ident %><br>
+    <%= input :sensor, :ext_service_ident, :value => @sensor.ext_service_ident, :class =>"form-control" %>
   </fieldset>
   <%= submit "Save", :class => "btn btn-primary" %>
   <a href='/' class="btn btn-secondary">Cancel</a>
