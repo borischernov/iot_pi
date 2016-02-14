@@ -2,6 +2,6 @@
 <br/><br/>
 <% @sensors.each do |sensor| %>
 <div class="alert alert-success" role="alert">
-  <%= sensor.to_s %>: <strong><%= sensor.last_formatted_value %></strong> (<%= sensor.last_reading.created_at rescue '-'%>)
+  <%= sensor.to_s %>: <strong><%= sensor.last_formatted_value %></strong> (<%= sensor.last_reading.created_at.localtime.to_s rescue '-'%>)
 </div>
 <% end %>
