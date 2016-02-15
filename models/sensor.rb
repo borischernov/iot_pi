@@ -32,6 +32,6 @@ class Sensor < ActiveRecord::Base
   end
   
   def has_ext_service?
-    self.ext_service.to_s != "None"
+    self.ext_service && self.ext_service.to_s != "None"
   end
 end
