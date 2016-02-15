@@ -21,6 +21,7 @@ module LocalSensors
       sensor = Sensor.where(ident: sensor_id).first_or_create  do |s|
         s.sensor_type = "Temperature"
       end
+      
       sensor.update_attributes(last_seen_at: Time.now, address: nil)
       sensor.sensor_readings.create(value: temp, timestamp: Time.now)
     end
