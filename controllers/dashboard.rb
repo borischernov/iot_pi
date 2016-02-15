@@ -8,6 +8,8 @@ get '/screen' do
   
   `/sbin/ifconfig eth0` =~ /inet\ addr\:(.*?)\ /
   @ip = $1.to_s.strip
+  `/sbin/ifconfig wlan0` =~ /inet\ addr\:(.*?)\ /
+  @ip += " " + $1.to_s.strip
    
   erb :'dashboard/screen'
 end
