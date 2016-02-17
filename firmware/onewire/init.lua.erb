@@ -35,7 +35,9 @@ function send_sensors_data()
       for i,addr in ipairs(addrs) do
         temp = t.read(addr)
         print("Temperature: "..str_addr(addr).." : "..temp.."'C")
-        send_data(str_addr(addr), temp)
+        if (temp ~= 85 and temp ~= -127) then 
+        	send_data(str_addr(addr), temp)
+       	end
       end
     end
 end
