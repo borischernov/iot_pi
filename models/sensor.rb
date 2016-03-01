@@ -15,6 +15,11 @@ class Sensor < ActiveRecord::Base
     self.sensor_readings.order('timestamp desc').first
   end
 
+  def alive?
+    r = sensor.last_reading
+    r && r.timestamp > 10.minutes.ago
+  end
+
   def last_value
     r = last_reading
     r ? r.value : nil
