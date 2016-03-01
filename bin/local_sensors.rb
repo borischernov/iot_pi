@@ -39,7 +39,7 @@ end
 
 lock = "/tmp/sensors_lock"
 begin
-  return if File.exists?(lock)
+  raise if File.exists?(lock)
   FileUtils.touch(lock)
   
   LocalSensors.poll_local_sensors
