@@ -15,7 +15,7 @@ module LocalSensors
     # Scan for DS18B20 temperature sensors
     `ls -1 /sys/bus/w1/devices`.scan(/28\-[0-9a-f]{12}/).each do |sensor_id|
       data = File.read("/sys/bus/w1/devices/#{sensor_id}/w1_slave") rescue ""
-      next unless data.include?("YES") && data =~ /t=(\d+)/
+      next unless data.include?("YES") && data =~ /t=(-?\d+)/
       temp = $1.to_f / 1000
       
       sensor = Sensor.where(ident: sensor_id).first_or_create  do |s|
