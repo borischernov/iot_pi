@@ -1,6 +1,6 @@
-#/usr/bin/ruby
-
-require './app'
+#
+# Polling local sensors
+#
 
 module LocalSensors
   def self.poll_local_sensors
@@ -35,15 +35,4 @@ module LocalSensors
       sleep(0.1)
     end
   end
-end
-
-lock = "/tmp/sensors_lock"
-begin
-  raise if File.exists?(lock)
-  FileUtils.touch(lock)
-  
-  LocalSensors.poll_local_sensors
-
-ensure
-  FileUtils.rm_f(lock)
 end

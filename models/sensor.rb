@@ -1,5 +1,5 @@
 class Sensor < ActiveRecord::Base
-  has_many :sensor_readings, dependent: :destroy
+  has_many :sensor_readings, dependent: :delete_all
 
   enum  sensor_type: [ "Temperature" ]
   enum  ext_service: ["None", "EasyIoT Cloud", "Thingspeak"]

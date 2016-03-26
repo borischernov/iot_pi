@@ -1,0 +1,2 @@
+local_sensors_poll: '2m'
+readings_retention_days: 30

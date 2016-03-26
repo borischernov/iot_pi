@@ -27,11 +27,11 @@ post '/firmware' do
 end
 
 def get_settings
-  YAML.load(File.read(File.join(APP_ROOT, 'settings/settings.yml'))) rescue {}
+  YAML.load(File.read(File.join(APP_ROOT, 'settings/esp_settings.yml'))) rescue {}
 end
 
 def save_settings(settings)
-  File.open(File.join(APP_ROOT, 'settings/settings.yml'), 'w') { |f| f.write settings.to_yaml }
+  File.open(File.join(APP_ROOT, 'settings/esp_settings.yml'), 'w') { |f| f.write settings.to_yaml }
 end
 
 def scan_firmwares
