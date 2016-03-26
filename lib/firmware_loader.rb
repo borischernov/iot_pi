@@ -1,3 +1,7 @@
+#
+# Class for programming ESP8266
+#
+
 begin 
   require 'wiringpi'
 rescue LoadError

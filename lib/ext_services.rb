@@ -1,3 +1,7 @@
+#
+# Sending data to external IoT cloud services
+#
+
 require 'net/http'
 require 'uri'
 
