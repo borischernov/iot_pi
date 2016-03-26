@@ -5,6 +5,8 @@ INCLUDED = caller.any?
 APP_ROOT = File.dirname(__FILE__)
 
 unless INCLUDED
+  require_relative 'lib/network_reset'
+
   require 'sinatra'
   require "sinatra/config_file"
   require 'sinatra/form_helpers'
