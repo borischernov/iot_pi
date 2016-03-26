@@ -7,7 +7,7 @@ require 'rufus-scheduler'
 scheduler = Rufus::Scheduler.new
 
 if SETTINGS[:local_sensors_poll]
-  require 'local_sensors'
+  require_relative 'local_sensors'
   
   scheduler.every SETTINGS[:local_sensors_poll], overlap: false do
     LocalSensors.poll_local_sensors  

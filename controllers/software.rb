@@ -4,9 +4,15 @@ get '/software' do
 end
 
 post '/software' do
+  update_software
+  "System is rebooting ..."
+end
+
+
+def update_software
   Dir.chdir(APP_ROOT)
   `git pull`
+  `bundle install`
   ActiveRecord::Migrator.migrate("db/migrate")
   `reboot`
-  "System is rebooting ..."
 end
