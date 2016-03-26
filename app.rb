@@ -1,18 +1,19 @@
 require 'rubygems'
 require 'bundler'
 
-Bundler.require
-
-require 'sinatra'
-require "sinatra/config_file"
-require 'sinatra/form_helpers'
-
+INCLUDED = caller.any? 
 APP_ROOT = File.dirname(__FILE__)
 
-config_file File.join(APP_ROOT, 'settings/config.yml')
+unless INCLUDED
+  require 'sinatra'
+  require "sinatra/config_file"
+  require 'sinatra/form_helpers'
+
+  config_file File.join(APP_ROOT, 'settings/config.yml')
+end
 
 require_relative 'models/init'
-require_relative 'controllers/init'
+require_relative 'controllers/init' unless INCLUDED
 
 
 

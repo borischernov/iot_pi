@@ -1,0 +1,10 @@
+<h1>Software Update</h1>
+<% if @updates_available %>
+<div class="alert alert-warning" role="alert">Software update is available</div>
+<%= form("/software", :post) %>
+<button type="submit" class="btn btn-primary">Update</button>
+</form>
+<% else %>
+<div class="alert alert-success" role="alert">Software is up to date</div>
+<% end %>
+<a href='/' class="btn btn-secondary">Back</a>

@@ -1,9 +1,12 @@
 <h1>Dashboard</h1>
 <span class="label label-info"><%= Time.now.to_s %></span>
-<a href="/firmware" class='pull-right btn btn-default btn-menu'>
+<a href="/software" class='pull-right btn btn-default btn-menu' title="Software Update">
+	<span class="glyphicon glyphicon-cloud-download" aria-hidden="true"></span>
+</a>
+<a href="/firmware" class='pull-right btn btn-default btn-menu' title="Program ESP8266">
 	<span class="glyphicon glyphicon-save" aria-hidden="true"></span>
 </a>
-<a href="/network" class='pull-right btn btn-default btn-menu'>
+<a href="/network" class='pull-right btn btn-default btn-menu' title="Network Settings">
 	<span class="glyphicon glyphicon-cog" aria-hidden="true"></span>
 </a>
 <br/><br/>
