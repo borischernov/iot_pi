@@ -1,0 +1,60 @@
+<h1>Network Settings</h1>
+<%= form("/network", :post) %>
+  <% if @errors && @errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+      <% @errors.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+	<% @interfaces.each do |interface| %>
+	<div class="panel panel-default">
+	  <div class="panel-heading"><%= interface[:name] %> (<%= interface[:type] %>)</div>
+	  <div class="panel-body">
+		<fieldset class="form-group">
+			<%= label "interfaces[#{interface[:name]}]", :mode %><br>
+			<%= select "interfaces[#{interface[:name]}]", :mode, ['unconfigured','dhcp','static'], :value => interface[:mode].to_s, :class =>"form-control if-mode-select" %>
+		</fieldset>
+		<section class="static-cfg">
+			<fieldset class="form-group">
+				<%= label "interfaces[#{interface[:name]}]", :address %><br>
+				<%= input "interfaces[#{interface[:name]}]", :address, :value => interface[:address], :class =>"form-control" %>
+			</fieldset>
+			<fieldset class="form-group">
+				<%= label "interfaces[#{interface[:name]}]", :netmask %><br>
+				<%= input "interfaces[#{interface[:name]}]", :netmask, :value => interface[:netmask], :class =>"form-control" %>
+			</fieldset>
+			<fieldset class="form-group">
+				<%= label "interfaces[#{interface[:name]}]", :gateway %><br>
+				<%= input "interfaces[#{interface[:name]}]", :gateway, :value => interface[:gateway], :class =>"form-control" %>
+			</fieldset>
+			<fieldset class="form-group">
+				<%= label "interfaces[#{interface[:name]}]", :nameservers %><br>
+				<%= input "interfaces[#{interface[:name]}]", :nameservers, :value => interface[:nameservers], :class =>"form-control" %>
+			</fieldset>
+		</section>
+		<% if interface[:type] == :wireless %>
+			<fieldset class="form-group">
+				<%= label "interfaces[#{interface[:name]}]", :ssid %><br>
+				<%= input "interfaces[#{interface[:name]}]", :ssid, :value => interface[:ssid], :class =>"form-control" %>
+			</fieldset>
+			<fieldset class="form-group">
+				<%= label "interfaces[#{interface[:name]}]", :encryption %><br>
+				<%= select "interfaces[#{interface[:name]}]", :encryption, ['none','wpa','wep'], :value => interface[:encryption].to_s, :class =>"form-control if-encryption-select" %>
+			</fieldset>
+			<section class="encryption-cfg">
+				<fieldset class="form-group">
+					<%= label "interfaces[#{interface[:name]}]", :password %><br>
+					<%= input "interfaces[#{interface[:name]}]", :password, :value => interface[:password], :class =>"form-control" %>
+				</fieldset>
+			</section>
+		<% end %>
+	  </div>
+	</div>
+	<% end %>
+	<button type="submit" class="btn btn-primary">Save</button>
+	<a href='/' class="btn btn-secondary">Cancel</a>
+</form>
