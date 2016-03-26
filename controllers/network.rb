@@ -66,7 +66,7 @@ def write_config(cfg)
   end.compact.join("\n\n") + "\n"
   
   File.open("/etc/network/interfaces",'w') { |f| f.write config }
-  `/sur/sbin/service networking restart` 
+  `/usr/sbin/service networking restart` 
 end
 
 def iface_list
