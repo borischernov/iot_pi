@@ -111,4 +111,3 @@ def iface_cfg(ifname)
     encryption: encryption
   }
 end
-
