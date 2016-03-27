@@ -19,3 +19,11 @@ if SETTINGS[:readings_retention_days].to_i > 0
     SensorReading.where('timestamp < ?', SETTINGS[:readings_retention_days].to_i.days.ago).delete_all
   end
 end
+
+if SETTINGS[:local_console]
+  require_relative 'local_console'
+  
+  scheduler.every SETTINGS[:local_console], overlap: false do
+    LocalConsole.show_info
+  end
+end
