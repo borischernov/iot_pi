@@ -3,6 +3,7 @@ ruby '1.9.3'
 
 gem 'activerecord'
 gem 'ansi'
+gem 'rake'
 gem 'rufus-scheduler'
 gem 'sinatra'
 gem 'sinatra-contrib'
