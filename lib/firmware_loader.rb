@@ -8,8 +8,8 @@ rescue LoadError
 end
 
 class FirmwareLoader
-  PIN_RESET = 0
-  PIN_GPIO0 = 1
+  PIN_RESET = SETTINGS[:esp_pin_reset]
+  PIN_GPIO0 = SETTINGS[:esp_pin_gpio0]
   
   def initialize(logger = nil)
     `echo #{PIN_RESET} >/sys/class/gpio/export`
@@ -49,7 +49,7 @@ class FirmwareLoader
   end
   
   def send_file(file_name, file_data)
-    @s = WiringPi::Serial.new('/dev/ttyAMA0', 115200)
+    @s = WiringPi::Serial.new(SETTINGS[:esp_serial_port], SETTINGS[:esp_serial_speed])
     serial_line("file.remove(\"#{file_name}\");")
     serial_line("file.open(\"#{file_name}\",\"w+\");")
     serial_line("w = file.writeline;")
@@ -116,7 +116,7 @@ class FirmwareLoader
   def esptool(args)
     esptool = File.join(APP_ROOT, '/bin/esptool.py')
     out = ""
-    IO.popen("#{esptool} --port /dev/ttyAMA0 #{args}") do |io|
+    IO.popen("#{esptool} --port #{SETTINGS[:esp_serial_port]} #{args}") do |io|
       loop do 
         line = io.gets rescue nil
         break unless line

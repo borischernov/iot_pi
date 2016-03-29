@@ -41,7 +41,7 @@ def scan_firmwares
     next unless File.exists?(cfgfile)
     cfg = eval(File.read(cfgfile))
     next unless cfg[:name]
-    [d, cfg[:name]]
+    [d, cfg]
   end.compact
 end
 

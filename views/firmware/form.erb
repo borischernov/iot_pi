@@ -18,9 +18,13 @@
     <%= input :settings, :password, :value => @settings['password'], :class =>"form-control" %>
   </fieldset>
   <fieldset class="form-group">
-    <%= label :firmware, :name %><br>
-    <%= select :firmware, :name, @firmwares, :value => (params[:firmware][:name] rescue nil), :class =>"form-control", :name => 'firmware' %>
+    <%= label :firmware, :name, 'Firmware type' %><br>
+    <%= select :firmware, :name, @firmwares.map { |d, c| [d, c[:name]]}, :value => (params[:firmware][:name] rescue nil), :class =>"form-control", :name => 'firmware' %>
   </fieldset>
+  <% @firmwares.each do |dir, cfg| %>
+  <% @dir = dir; @cfg = cfg %>
+  <%= erb :'firmware/_params' %>
+  <% end %>
   <%= submit "Upload", :class => "btn btn-primary" %>
   <a href='/' class="btn btn-secondary">Cancel</a>
 </form>

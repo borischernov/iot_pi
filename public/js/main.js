@@ -16,4 +16,15 @@ $(document).ready(function() {
 	});
 	
 	$('.if-encryption-select').change();
+	
+	$('#firmware_name').change(function() {
+		$(".fw-param").prop('disabled', true);
+		$(".fw-params").hide();
+		sid = "fw-params-" + $(this).val(); 
+		$("#" + sid + " .fw-param").prop('disabled', false);
+		$("#" + sid).show();
+	});
+	
+	$('#firmware_name').change();
+	
 });

@@ -1,3 +1,8 @@
 local_sensors_poll: '2m'
 readings_retention_days: 30
 local_console: '1m'
+# ESP8266 connection parameters
+esp_serial_port: '/dev/ttyAMA0'
+esp_serial_speed: 115200
+esp_pin_reset: 0 
+esp_pin_gpio0: 1
