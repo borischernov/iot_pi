@@ -1,6 +1,7 @@
-local_sensors_poll: '2m'
-readings_retention_days: 30
-local_console: '1m'
+local_sensors_poll: '2m'          # Local sensors poll frequency
+readings_retention_days: 30       # Retention interval for sensor readings
+local_console: '1m'               # Refresh interval for local console (false to disable)
+network_reset_gpio: 7             # GPIO pin used for network settings reset
 # ESP8266 connection parameters
 esp_serial_port: '/dev/ttyAMA0'
 esp_serial_speed: 115200
