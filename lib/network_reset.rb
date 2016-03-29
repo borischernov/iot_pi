@@ -6,10 +6,12 @@
 
 if SETTINGS[:network_reset_gpio]
   `echo #{SETTINGS[:network_reset_gpio]} >/sys/class/gpio/export`
+  pin_base = "/sys/class/gpio/gpio#{SETTINGS[:network_reset_gpio]}"
   sleep(0.1)
-  `echo in >/sys/class/gpio/gpio#{SETTINGS[:network_reset_gpio]}/direction`
+  `echo in >#{pin_base}/direction`
+  `echo up >#{pin_base}/pull` if File.exists?("#{pin_base}/pull") # Enable pull-up on Banana Pi
   sleep(0.1)
-  rst = File.read("/sys/class/gpio/gpio#{SETTINGS[:network_reset_gpio]}/value").to_s.strip rescue nil
+  rst = File.read("#{pin_base}/value").to_s.strip rescue nil
   
   if rst == '0'
     # Reset network configuration
