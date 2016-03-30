@@ -2,8 +2,8 @@
 <% @cfg[:params].each do |param| %>
   <fieldset class="form-group">
     <%= label :firmware, param[:name], param[:title] %><br>
-    <% case param[:type] %>
-    <% when :string %>
+    <% case param[:type] 
+       when :string %>
     <%= input :settings, param[:name], :value => @settings[param[:name]] || param[:value], :class =>"form-control fw-param" %>
     <% when :select %>
     <%= select :settings, param[:name], param[:options], :value => @settings[param[:name]] || param[:value], :class =>"form-control fw-param" %>
