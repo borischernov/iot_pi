@@ -54,7 +54,7 @@ function send_sensors_data()
     gpio0 = 3
     gpio2 = 4
     am2320.init(gpio0, gpio2)
-    
+    tmr.delay(20000)
     rh, t = am2320.read()
     print(string.format("RH: %s%%", rh / 10))
     print(string.format("Temperature: %s degrees C", t / 10))
