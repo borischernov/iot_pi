@@ -51,10 +51,6 @@ end
 <% when 'am2320' %>
 -----------------------------------------------------------------------------------------
 function send_sensors_data()
-    gpio0 = 3
-    gpio2 = 4
-    am2320.init(gpio0, gpio2)
-    tmr.delay(20000)
     rh, t = am2320.read()
     print(string.format("RH: %s%%", rh / 10))
     print(string.format("Temperature: %s degrees C", t / 10))
@@ -72,6 +68,13 @@ print("Setting up WIFI...")
 wifi.setmode(wifi.STATION)
 wifi.sta.config("<%= @params['ssid'] %>","<%= @params['password'] %>")
 wifi.sta.connect()
+
+<% if @params['sensor_type'] == 'am2320' %>
+gpio0 = 3
+gpio2 = 4
+am2320.init(gpio0, gpio2)
+<% end %> 
+
 tmr.alarm(1, 500, tmr.ALARM_AUTO, function() 
     if wifi.sta.getip() == nil then 
         print("IP unavaiable, Waiting...") 
