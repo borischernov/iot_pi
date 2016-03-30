@@ -18,8 +18,8 @@ function send_data(data)
     conn:connect(<%= @params['port'] %>,"<%= @params['host'] %>") 
 end
 
-<% case @params[:sensor_type] %>
-<% when 'ds18b20' %>
+<% case @params[:sensor_type] 
+   when 'ds18b20' %>
 -----------------------------------------------------------------------------------------
 function str_addr(addr)
     res = string.format("%02x", addr:byte(1)).."-"
