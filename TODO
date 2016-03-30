@@ -1,2 +1,5 @@
 - Scan WiFi networks in network settings tab
 - Backup / resore of configuration
+- S/W update: show progress bar and disable update button
+- Firmware upload: make scrollable box for output
+- Implement ESP8266 firmware startup check
