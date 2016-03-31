@@ -3,6 +3,7 @@ ruby '1.9.3'
 
 gem 'activerecord'
 gem 'ansi'
+gem 'i2c'
 gem 'rake'
 gem 'rufus-scheduler'
 gem 'sinatra'

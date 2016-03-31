@@ -41,4 +41,15 @@ class Sensor < ActiveRecord::Base
   def has_ext_service?
       self.ext_service && self.ext_service.to_s != "None"
   end
+  
+  def self.create_reading(ident, value, tstamp = Time.now, sensor_type = nil)
+    sensor_type ||= ident =~ /\-rh$/ ? 'Relative Humidity' : 'Temperature'
+
+    sensor = Sensor.where(ident: ident).first_or_create  do |s|
+      s.sensor_type = sensor_type
+    end
+    
+    sensor.update_attributes(last_seen_at: Time.now, address: nil)
+    sensor.sensor_readings.create(value: value, timestamp: tstamp)
+  end
 end
