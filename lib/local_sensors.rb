@@ -61,7 +61,7 @@ module LocalSensors
       temperature = temperature.to_f / 10
       
       Sensor.create_reading("am2320-local-t", temperature, Time.now, 'Temperature')
-      Sensor.create_reading("am2320-local-rh", temperature, Time.now, 'Relative Humidity')
+      Sensor.create_reading("am2320-local-rh", humidity, Time.now, 'Relative Humidity')
     rescue
     end    
   end
