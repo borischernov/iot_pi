@@ -26,5 +26,10 @@ $(document).ready(function() {
 	});
 	
 	$('#firmware_name').change();
+
+	$('.progress-form').submit(function() {
+  		$(this).find("button[type='submit']").prop('disabled',true);
+  		$(this).find(".loading").show();
+	});
 	
 });
