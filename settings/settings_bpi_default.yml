@@ -15,3 +15,5 @@ local_sensors:
   poll_interval: '2m'          # Local sensors poll frequency (false to disable)
   poll_1wire: tr               # Poll 1wire sensors (true / false)
   poll_i2c: 2                  # Poll i2c sensors (bus number / false to disable)
+#local_actuators:
+#  gpio_out: 14                # Local GPIO out
