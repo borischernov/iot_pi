@@ -7,15 +7,17 @@ begin
 rescue LoadError
 end
 
+require 'gpio'
+
 class FirmwareLoader
-  PIN_RESET = SETTINGS[:esp8266][:pin_reset]
-  PIN_GPIO0 = SETTINGS[:esp8266][:pin_gpio0]
-  
   def initialize(logger = nil)
-    `echo #{PIN_RESET} >/sys/class/gpio/export`
-    `echo #{PIN_GPIO0} >/sys/class/gpio/export`
-    `echo out >/sys/class/gpio/gpio#{PIN_RESET}/direction`
-    `echo out >/sys/class/gpio/gpio#{PIN_GPIO0}/direction`
+    @pin_reset = SETTINGS[:esp8266][:pin_reset]
+    @pin_gpio0 = SETTINGS[:esp8266][:pin_gpio0]
+    @port = SETTINGS[:esp8266][:serial_port]
+    @speed = SETTINGS[:esp8266][:serial_speed]
+    
+    Gpio.setup(@pin_reset, :out)
+    Gpio.setup(@pin_gpio0, :out)
 
     @logger = logger 
   end
@@ -49,7 +51,7 @@ class FirmwareLoader
   end
   
   def send_file(file_name, file_data)
-    @s = WiringPi::Serial.new(SETTINGS[:esp8266][:serial_port], SETTINGS[:esp8266][:serial_speed])
+    @s = WiringPi::Serial.new(@port, @speed)
     serial_line("file.remove(\"#{file_name}\");")
     serial_line("file.open(\"#{file_name}\",\"w+\");")
     serial_line("w = file.writeline;")
@@ -107,16 +109,16 @@ class FirmwareLoader
   end
   
   def reset_esp(gpio0)
-   `echo #{gpio0} >/sys/class/gpio/gpio#{PIN_GPIO0}/value`
-   `echo 0 >/sys/class/gpio/gpio#{PIN_RESET}/value`
+    Gpio.write(@pin_gpio0, gpio0)
+    Gpio.write(@pin_reset, 0)
     sleep(0.1)
-   `echo 1 >/sys/class/gpio/gpio#{PIN_RESET}/value`
+    Gpio.write(@pin_reset, 1)
   end
   
   def esptool(args)
     esptool = File.join(APP_ROOT, '/bin/esptool.py')
     out = ""
-    IO.popen("#{esptool} --port #{SETTINGS[:esp8266][:serial_port]} #{args}") do |io|
+    IO.popen("#{esptool} --port #{@port} #{args}") do |io|
       loop do 
         line = io.gets rescue nil
         break unless line
