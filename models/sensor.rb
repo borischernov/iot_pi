@@ -16,8 +16,7 @@ class Sensor < ActiveRecord::Base
   end
 
   def alive?
-    r = self.last_reading
-    r && r.timestamp > 10.minutes.ago
+    self.last_seen_at && self.last_seen_at > 10.minutes.ago
   end
 
   def last_value
