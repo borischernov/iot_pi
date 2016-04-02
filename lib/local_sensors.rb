@@ -5,8 +5,8 @@ require 'i2c/i2c'
 
 module LocalSensors
   def self.poll_local_sensors
-    self.poll_1wire_sensors if SETTINGS[:poll_1wire]
-    self.poll_i2c_sensors if SETTINGS[:poll_i2c]
+    self.poll_1wire_sensors if SETTINGS[:local_sensors][:poll_1wire]
+    self.poll_i2c_sensors if SETTINGS[:local_sensors][:poll_i2c]
   end
   
   protected 
