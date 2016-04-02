@@ -5,10 +5,11 @@ readings_retention_days: 30       # Retention interval for sensor readings
 local_console: '1m'               # Refresh interval for local console (false to disable)
 network_reset_gpio: 4             # GPIO pin used for network settings reset (GPIO4 = PH02)
 # ESP8266 connection parameters
-esp_serial_port: '/dev/ttyS1'
-esp_serial_speed: 115200
-esp_pin_reset: 24                 # PH20
-esp_pin_gpio0: 23                 # PH21
+esp8266:
+  serial_port: '/dev/ttyS1'
+  serial_speed: 115200
+  pin_reset: 24                 # PH20
+  pin_gpio0: 23                 # PH21
 # Local sensors parameters
 local_sensors_poll: '2m'          # Local sensors poll frequency (false to disable)
 poll_1wire: true                  # Poll 1wire sensors (true / false)
