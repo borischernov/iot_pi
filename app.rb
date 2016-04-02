@@ -3,6 +3,7 @@ require 'bundler'
 
 INCLUDED = caller.any? 
 APP_ROOT = File.dirname(__FILE__)
+$LOAD_PATH.unshift(File.join(APP_ROOT,'lib'))
 
 unless INCLUDED
   require 'sinatra'
@@ -20,6 +21,12 @@ unless INCLUDED
   require_relative 'lib/network_reset'
 
   require_relative 'controllers/init' 
+
+  if SETTINGS[:local_actuators]
+    require_relative 'lib/local_actuators'
+    LocalActuators.setup_actuators
+  end
+
   require_relative 'lib/scheduler'
 end
 

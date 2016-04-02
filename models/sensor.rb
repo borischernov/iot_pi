@@ -44,7 +44,7 @@ class Sensor < ActiveRecord::Base
   def self.create_reading(ident, value, tstamp = Time.now, sensor_type = nil)
     sensor_type ||= ident =~ /\-rh$/ ? 'Relative Humidity' : 'Temperature'
 
-    sensor = Sensor.where(ident: ident).first_or_create  do |s|
+    sensor = Sensor.where(ident: ident).first_or_create do |s|
       s.sensor_type = sensor_type
     end
     

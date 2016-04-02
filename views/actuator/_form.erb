@@ -1,0 +1,26 @@
+<%= form("/actuator/edit/#{@actuator.id}", :post) %>
+  <% if @actuator.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+      <% @actuator.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset class="form-group">
+	<%= label :actuator, :ident %><br>
+    <%= input :actuator, :ident, :value => @actuator.ident, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :actuator, :name %><br>
+    <%= input :actuator, :name, :value => @actuator.name, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :actuator, :actuator_type %><br>
+    <%= select :actuator, :actuator_type, Actuator.actuator_types.keys.to_a, :value => @actuator.actuator_type, :class =>"form-control" %>
+  </fieldset>
+  <%= submit "Save", :class => "btn btn-primary" %>
+  <a href='/' class="btn btn-secondary">Cancel</a>
+</form>
