@@ -32,4 +32,9 @@ $(document).ready(function() {
   		$(this).find(".loading").show();
 	});
 	
+	$("input.switch").bootstrapSwitch();
+	$("input.switch").on('switchChange.bootstrapSwitch', function(event, state) {
+		window.location.replace("/actuator/set/" + $(this).data("id") + "/" + (state ? '1' : '0'));
+	});
+
 });
