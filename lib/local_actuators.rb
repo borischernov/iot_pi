@@ -28,8 +28,6 @@ module LocalActuators
     actuator = Actuator.where(ident: "local-gpio-#{gpio}-dout").first_or_create do |a|
       a.actuator_type = "Switch"
       a.active_low = true
-      a.value_requested = '0'
-      a.value_set = '0'
       a.address = 'local'
     end
     Gpio.setup(gpio, :out)    

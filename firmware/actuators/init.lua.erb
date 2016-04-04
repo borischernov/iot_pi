@@ -1,0 +1,116 @@
+function hex_to_char(x)
+  return string.char(tonumber(x, 16))
+end
+
+function unescape(url)
+  return url:gsub("%%(%x%x)", hex_to_char)
+end
+
+function server(port, callback)
+    srv=net.createServer(net.TCP)
+    srv:listen(port,function(conn)
+        conn:on("receive", function(client,request)
+            local cip, _ = client:getpeer()
+            local _, _, method, path, vars = string.find(request, "([A-Z]+) (.+)?(.+) HTTP")
+            if method == nil then
+                _, _, method, path = string.find(request, "([A-Z]+) (.+) HTTP")
+            end
+            local _GET = {}
+            if (vars ~= nil)then
+                vars = unescape(vars)
+                for k, v in string.gmatch(vars, "([^&]+)=([^&]+)&*") do
+                    _GET[k] = v
+                end
+            end
+            local code, buf, content_type = callback(method, path, _GET, cip)
+            if code == 200 then
+                buf = "HTTP/1.1 200 OK\nContent-Type: " .. content_type .. "\nContent-Length:" .. string.len(buf) .. "\n\n" .. buf
+            elseif code == 403 then
+                buf = "HTTP/1.1 403 Forbidden\n\n"
+            else
+                buf = "HTTP/1.1 404 Not Found\n\n"
+            end
+            client:send(buf)
+            client:close()
+            print(cip .. " " .. method .. " " .. path .. " " .. code)
+            collectgarbage()
+        end)
+    end)
+end
+
+function register_actuator()
+    local idents = ""
+    for k,v in pairs(gp) do
+        if idents ~= "" then
+            idents = idents .. "%7C"
+        end
+        idents = idents .. k
+    end
+    local url = "http://" .. iot_server_ip .. ":<%= @params['port'] %>/api/actuator?secret=" .. secret .. "&idents=" .. idents
+    print(url)
+    http.get(url, nil, function(code, data)
+        if (code < 0) then
+          print("HTTP request failed")
+        else
+          print(code, data)
+        end
+    end)
+end
+
+-- Set up WiFi
+print("Setting up WIFI...")
+wifi.setmode(wifi.STATION)
+wifi.sta.config("<%= @params['ssid'] %>","<%= @params['password'] %>")
+wifi.sta.connect()
+
+-- Set up GPIO
+ident_base = wifi.sta.getmac()
+gp = {[ident_base .. "-gpio-0-dout"] = 3, 
+      [ident_base .. "-gpio-2-dout"] = 4}
+
+for k,v in pairs(gp) do
+    gpio.mode(v, gpio.OUTPUT)
+    gpio.write(v, gpio.HIGH)
+end
+
+-- Start server
+iot_server_ip = "<%= @params['host'] %>"
+secret = "<%= Digest::SHA1.hexdigest("#{Time.now.to_s}----#{rand(10000000)}----#{rand(1000000)}") %>"
+
+server(80, function(method, path, params, client_ip)
+    if (client_ip ~= iot_server_ip) or (params.secret ~= secret) then
+        return 403, nil, nil
+    end
+    
+    if path ~= "/actuate" then
+        return 404, nil, nil
+    end                
+
+    local pin = gp[params.ident];
+    if pin == nil then
+        return 200, "ERROR Unknown ident", "text/plain"
+    end
+
+    value = params.value
+    if value == nil then
+        return 200, "ERROR Missing value", "text/plain"
+    end
+
+    -- Active Low
+    value = value == "0" and gpio.HIGH or gpio.LOW
+    gpio.write(pin, value);
+
+    return 200, "OK", "text/plain"
+end)
+
+tmr.alarm(1, 500, tmr.ALARM_AUTO, function() 
+    if wifi.sta.getip() == nil then 
+        print("IP unavaiable, Waiting...") 
+    else 
+        print("IP is " .. wifi.sta.getip())
+        tmr.interval(1, 60000) 
+        register_actuator()      
+    end
+end)
+
+

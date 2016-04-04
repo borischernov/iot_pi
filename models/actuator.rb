@@ -4,6 +4,12 @@ require 'timeout'
 class Actuator < ActiveRecord::Base
   enum  actuator_type: [ "Switch", "Analog" ]
 
+  before_validation on: :create do
+    value_requested ||= '0'
+    value_set ||= '0'
+  end
+  
+
   validates :ident, presence: true, uniqueness: true
   validate do
     errors.add(:value_requested, "is invalid") unless value_requested_is_valid?       
@@ -61,9 +67,9 @@ class Actuator < ActiveRecord::Base
       return false if self.address.to_s.strip == ""
       path = "/actuate?" + URI.encode_www_form({ident: self.ident, secret: self.secret, value: self.value_requested})
       begin
-        Timeout::timeout(3) do
+        response = Timeout::timeout(3) do
           http = Net::HTTP.new(self.address, 80)
-          response = http.request(Net::HTTP::Get.new(uri.request_uri))
+          http.request(Net::HTTP::Get.new(path))
         end
         ok = response.body.to_s.strip == "OK"
         self.update_attribute(:value_set, self.value_requested) if ok
@@ -72,6 +78,19 @@ class Actuator < ActiveRecord::Base
         false
       end
     end
+  end
+
+  def self.register(ident, secret, ip)
+    return :error if ident.to_s.strip == "" || secret.to_s.strip == "" || ip.to_s.strip == ""
+    actuator = Actuator.where(ident: ident).first_or_create do |s|
+      s.actuator_type = ident =~ /-dout$/ ? 'Switch' : 'Analog'
+      s.active_low = true if s.actuator_type == 'Switch'
+      s.value_requested = 0
+    end
+    actuator.last_seen_at = Time.now
+    actuator.address = ip
+    actuator.secret = secret
+    actuator.save ? :ok : :error
   end
 
 end

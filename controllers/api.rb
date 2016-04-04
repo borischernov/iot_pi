@@ -14,6 +14,14 @@
    set_data_multiple(params[:data], params[:ts])
  end
 
+ get '/api/actuator' do
+   ip = request.ip
+   secret = params[:secret]
+   params[:idents].to_s.split("|").map do |ident|
+      Actuator.register(ident, secret, ip)
+   end.join("|")
+ end
+
 def set_data_multiple(data, ts = nil)
   data.to_s.split("|").each_slice(2).map do |sensor, value|
     set_data(sensor, value, ts)
