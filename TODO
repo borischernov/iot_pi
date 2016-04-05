@@ -1,5 +1,4 @@
 - Scan WiFi networks in network settings tab
 - Backup / resore of configuration
 - Firmware upload: make scrollable box for output
-- Firmware upload: option to only upload scripts w/o reflashing nodemcu
 - Implement ESP8266 firmware startup check

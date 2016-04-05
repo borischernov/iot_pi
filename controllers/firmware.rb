@@ -15,13 +15,16 @@ post '/firmware' do
   stream do |out|
     out << erb(:'firmware/upload')
     loader = FirmwareLoader.new(lambda { |str| out << "<script type=\"text/javascript\">$('#output').append(#{"#{str}\n".to_json rescue ""});window.scrollTo(0,document.body.scrollHeight);</script>\n" })
-    if loader.flash_nodemcu
-      fw_dir = File.join(APP_ROOT, 'firmware', params[:firmware][:name])
-      cfg = eval(File.read(File.join(fw_dir, 'firmware.rb')))
-      loader.send_firmware(fw_dir, cfg[:files], @settings)
-    else
+
+    if !loader.flash_nodemcu(params[:firmware][:skip_nodemcu].to_i == 1)
       out << "<script type=\"text/javascript\">$('#output').append(\"Failed to upload NodeMCU\")</script>\n"
+      next
     end
+    
+    fw_dir = File.join(APP_ROOT, 'firmware', params[:firmware][:name])
+    cfg = eval(File.read(File.join(fw_dir, 'firmware.rb')))
+    loader.send_firmware(fw_dir, cfg[:files], @settings)
+
     out << "<script type=\"text/javascript\">$('#back').show()</script>\n"
   end
 end

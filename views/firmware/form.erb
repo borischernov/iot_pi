@@ -18,6 +18,10 @@
     <%= input :settings, :password, :value => @settings['password'], :class =>"form-control" %>
   </fieldset>
   <fieldset class="form-group">
+    <%= label :firmware, :skip_nodemcu, "Don't flash NodeMCU" %><br>
+    <%= checkbox :firmware, :skip_nodemcu, 1, label: false %>
+  </fieldset>
+  <fieldset class="form-group">
     <%= label :firmware, :name, 'Firmware type' %><br>
     <%= select :firmware, :name, @firmwares.map { |d, c| [d, c[:name]]}, :value => (params[:firmware][:name] rescue nil), :class =>"form-control", :name => 'firmware' %>
   </fieldset>

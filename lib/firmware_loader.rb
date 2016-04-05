@@ -22,7 +22,7 @@ class FirmwareLoader
     @logger = logger 
   end
   
-  def flash_nodemcu
+  def flash_nodemcu(just_check = false)
     # enter bootloader
     status("Entering bootloader mode")
     reset_esp(0)
@@ -34,12 +34,14 @@ class FirmwareLoader
       return false
     end    
     
-    # flash NodeMCU
-    status("Flashing NodeMCU")
-    fw_file = File.join(APP_ROOT, '/firmware/nodemcu/nodemcu.bin')
-    unless esptool("write_flash 0x00000 #{fw_file}").include?("Wrote")
-      status("Failed to flash NodeMCU")
-      return false
+    unless just_check
+      # flash NodeMCU
+      status("Flashing NodeMCU")
+      fw_file = File.join(APP_ROOT, '/firmware/nodemcu/nodemcu.bin')
+      unless esptool("write_flash 0x00000 #{fw_file}").include?("Wrote")
+        status("Failed to flash NodeMCU")
+        return false
+      end
     end
     
     # resetting in normal mode
