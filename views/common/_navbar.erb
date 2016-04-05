@@ -1,0 +1,21 @@
+<nav class="navbar navbar-default">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span> 
+      </button>
+      <a class="navbar-brand" href="/">IoT Pi</a>
+    </div>
+    <div class="collapse navbar-collapse" id="myNavbar">
+      <ul class="nav navbar-nav">
+        <li><a href="/">Dashboard</a></li>
+        <li><a href="/firmware">Program ESP8266</a></li> 
+        <li><a href="/network">Network</a></li>
+        <li><a href="/software">Update</a></li> 
+      </ul>
+      <p class="navbar-text navbar-right"><%= Time.now.to_s %></p>
+    </div>
+  </div>
+</nav>
