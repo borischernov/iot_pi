@@ -11,17 +11,8 @@ class Sensor < ActiveRecord::Base
     self.name || self.ident
   end
 
-  def last_reading
-    self.sensor_readings.order('timestamp desc').first
-  end
-
   def alive?
     self.last_seen_at && self.last_seen_at > 10.minutes.ago
-  end
-
-  def last_value
-    r = last_reading
-    r ? r.value : nil
   end
 
   def last_formatted_value
@@ -41,14 +32,14 @@ class Sensor < ActiveRecord::Base
       self.ext_service && self.ext_service.to_s != "None"
   end
   
-  def self.create_reading(ident, value, tstamp = Time.now, sensor_type = nil)
+  def self.create_reading(ident, value, tstamp = Time.now, sensor_type = nil, address = nil)
     sensor_type ||= ident =~ /\-rh$/ ? 'Relative Humidity' : 'Temperature'
 
     sensor = Sensor.where(ident: ident).first_or_create do |s|
       s.sensor_type = sensor_type
     end
     
-    sensor.update_attributes(last_seen_at: Time.now, address: nil)
+    sensor.update_attributes(last_seen_at: Time.now, address: address, last_value: value)
     sensor.sensor_readings.create(value: value, timestamp: tstamp)
   end
 end
