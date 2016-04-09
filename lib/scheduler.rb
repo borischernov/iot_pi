@@ -27,3 +27,7 @@ if SETTINGS[:local_console]
     LocalConsole.show_info
   end
 end
+
+scheduler.every '1m', overlap: false do
+  Alarm.detect_sensor_failures
+end

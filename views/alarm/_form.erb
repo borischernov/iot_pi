@@ -1,0 +1,63 @@
+  <% if @alarm.errors.any? %>
+    <div class="alert alert-danger" role="alert">
+      <ul>
+      <% @alarm.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <fieldset class="form-group">
+	<%= label :alarm, :description %><br>
+    <%= input :alarm, :description, :value => @alarm.description, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+	<%= label :alarm, :enabled %><br>
+    <%= check_box :alarm, :enabled, @alarm.enabled %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :alarm, :sensor_id, "Sensor" %><br>
+    <%= select :alarm, :sensor_id, Sensor.all.order(:name).map { |s| [s.id, s.to_s] }, :value => @alarm.sensor_id, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+    <%= label :alarm, :operation %><br>
+    <%= select :alarm, :operation, Alarm.operations.keys.to_a, :value => @alarm.operation, :class =>"form-control" %>
+  </fieldset>
+  <fieldset class="form-group">
+	<%= label :alarm, :value %><br>
+    <%= input :alarm, :value, :value => @alarm.value, :class =>"form-control" %>
+  </fieldset>
+
+  <hr/>
+  <section>
+	  <fieldset class="form-group">
+		<%= label :alarm, :activate_action %><br>
+	    <%= select :alarm, :activate_action, Alarm::ACTIONS.each_with_index.to_a.map(&:reverse).unshift([nil,nil]), :value => @alarm.activate_action, :class =>"form-control alarm-action" %>
+	  </fieldset>
+	  <fieldset class="form-group action action0">
+	    <%= label :alarm, :activate_actuator_id, "Actuator" %><br>
+	    <%= select :alarm, :activate_actuator_id, Actuator.all.order(:name).map { |s| [s.id, s.to_s] }.unshift([nil,nil]), :value => @alarm.activate_actuator_id, :class =>"form-control" %>
+	  </fieldset>
+	  <fieldset class="form-group action action0">
+		<%= label 'alarm[activate_params]', :value %><br>
+	    <%= input 'alarm[activate_params]', :value, :value => (@alarm.activate_params || {})['value'], :class =>"form-control" %>
+	  </fieldset>
+  </section>
+
+  <hr/>
+  <section>
+	  <fieldset class="form-group">
+		<%= label :alarm, :restore_action %><br>
+	    <%= select :alarm, :restore_action, Alarm::ACTIONS.each_with_index.to_a.map(&:reverse).unshift([nil,nil]), :value => @alarm.restore_action, :class =>"form-control alarm-action" %>
+	  </fieldset>
+	  <fieldset class="form-group action action0">
+	    <%= label :alarm, :restore_actuator_id, "Actuator" %><br>
+	    <%= select :alarm, :restore_actuator_id, Actuator.all.order(:name).map { |s| [s.id, s.to_s] }.unshift([nil,nil]), :value => @alarm.restore_actuator_id, :class =>"form-control" %>
+	  </fieldset>
+	  <fieldset class="form-group action action0">
+		<%= label 'alarm[restore_params]', :value %><br>
+	    <%= input 'alarm[restore_params]', :value, :value => (@alarm.restore_params || {})['value'], :class =>"form-control" %>
+	  </fieldset>
+  </section>
+ 

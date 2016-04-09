@@ -1,11 +1,16 @@
 class Sensor < ActiveRecord::Base
   has_many :sensor_readings, dependent: :delete_all
+  has_many :alarms, dependent: :destroy
 
   enum  sensor_type: [ "Temperature", "Relative Humidity" ]
   enum  ext_service: ["None", "EasyIoT Cloud", "Thingspeak"]
 
   validates :ident, presence: true, uniqueness: true
   validates :ext_service_ident, presence: { :if => :has_ext_service? }
+
+  after_update do
+    self.alarms.enabled.each(&:check) if self.last_value_changed?
+  end
 
   def to_s
     self.name || self.ident

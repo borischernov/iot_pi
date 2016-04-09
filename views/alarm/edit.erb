@@ -1,0 +1,6 @@
+<h1>Edit Alarm</h1>
+<%= form("/alarm/update/#{@alarm.id}", :post) %>
+<%= erb :'alarm/_form' %>
+<%= submit "Update", :class => "btn btn-primary" %>
+<a href='/alarms' class="btn btn-secondary">Cancel</a>
+</form>

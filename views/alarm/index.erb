@@ -1,0 +1,21 @@
+<h1>Alarms</h1>
+<a href="/alarm/new" class='top-action-link btn btn-default'>
+	<span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+</a>
+<% @alarms.each do |alarm| %>
+<div class="alert <%= alarm.enabled ? (alarm.active ? 'alert-danger' : 'alert-success') : 'alert-warning' %>" role="alert">
+  <%= alarm.to_s %>
+
+  <a href="/alarm/edit/<%= alarm.id %>" class='action-link btn btn-default'>
+  	<span class="glyphicon glyphicon-pencil" aria-hidden="true"></span>
+  </a>
+
+  <form method="post" action="/alarm/delete/<%= alarm.id %>" class="action-form" data-confirm="Are you sure?">
+  <button class='action-link btn btn-default'>
+  	<span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
+  </button>
+  </form>
+
+</div>
+<% end %>
+

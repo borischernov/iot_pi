@@ -37,4 +37,13 @@ $(document).ready(function() {
 		window.location.replace("/actuator/set/" + $(this).data("id") + "/" + (state ? '1' : '0'));
 	});
 
+	$('.alarm-action').change(function() {
+		$(this).parents('section').children('fieldset.action').hide();
+		val = $(this).val();
+		if (val == "")
+			return;
+		$(this).parents('section').children('fieldset.action' + val).show();
+	});
+
+	$('.alarm-action').change();
 });

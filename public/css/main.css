@@ -2,6 +2,10 @@
   float: right;
   margin: -5px 10px;
 }
+.top-action-link {
+  float: right;
+  margin: -50px 25px;
+}
 .action-form {
 	display: inline;
 }

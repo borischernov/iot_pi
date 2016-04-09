@@ -37,15 +37,19 @@ class Actuator < ActiveRecord::Base
     end
   end
 
-  def value_requested_is_valid?
+  def valid_value?(value)
     case self.actuator_type
     when 'Switch'
-      ['0','1'].include?(self.value_requested.to_s)
+      ['0','1'].include?(value.to_s)
     when 'Analog'
-      !!(self.value_requested.to_s =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/)
+      !!(value.to_s =~ /\A[-+]?[0-9]*\.?[0-9]+\Z/)
     else
       false      
     end
+  end
+
+  def value_requested_is_valid?
+    valid_value?(self.value_requested)
   end
 
   def value
