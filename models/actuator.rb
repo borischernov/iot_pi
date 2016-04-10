@@ -5,8 +5,8 @@ class Actuator < ActiveRecord::Base
   enum  actuator_type: [ "Switch", "Analog" ]
 
   before_validation on: :create do
-    value_requested ||= '0'
-    value_set ||= '0'
+    self.value_requested ||= '0'
+    self.value_set ||= '0'
   end
   
 
