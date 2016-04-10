@@ -9,7 +9,7 @@ class Sensor < ActiveRecord::Base
   validates :ext_service_ident, presence: { :if => :has_ext_service? }
 
   after_update do
-    self.alarms.enabled.each(&:check) if self.last_value_changed?
+    self.alarms.enabled.each(&:check) rescue nil if self.last_value_changed? 
   end
 
   def to_s
