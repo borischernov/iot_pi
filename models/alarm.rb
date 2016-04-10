@@ -8,7 +8,7 @@ class Alarm < ActiveRecord::Base
 
   after_update :check
 
-  scope :enabled, -> { where('alarms.enabled') }
+  scope :enabled, -> { where(enabled: true) }
   scope :failure_checks, -> { where(operation: 3) }
 
   ACTIONS = ["Set Actuator"]
