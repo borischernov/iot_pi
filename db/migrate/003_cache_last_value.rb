@@ -4,7 +4,7 @@ class CacheLastValue < ActiveRecord::Migration
     Sensor.reset_column_information
     Sensor.all.each do |s|
       r = s.sensor_readings.order('timestamp desc').first
-      r.update_attribute(:last_value, r.value) if r
+      s.update_attribute(:last_value, r.value) if r
     end
   end
 end
