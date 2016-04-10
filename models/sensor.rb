@@ -12,6 +12,7 @@ class Sensor < ActiveRecord::Base
     self.alarms.enabled.each(&:check) rescue nil if self.last_value_changed? 
   end
 
+
   def to_s
     self.name || self.ident
   end
