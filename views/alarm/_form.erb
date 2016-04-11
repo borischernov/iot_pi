@@ -59,5 +59,13 @@
 		<%= label 'alarm[restore_params]', :value %><br>
 	    <%= input 'alarm[restore_params]', :value, :value => (@alarm.restore_params || {})['value'], :class =>"form-control" %>
 	  </fieldset>
+	  <fieldset class="form-group action action1">
+		<%= label 'alarm[restore_params]', :number_to %><br>
+	    <%= input 'alarm[restore_params]', :number_to, :value => (@alarm.restore_params || {})['number_to'], :class =>"form-control" %>
+	  </fieldset>
+	  <fieldset class="form-group action action1">
+		<%= label 'alarm[restore_params]', :message %><br>
+	    <%= input 'alarm[restore_params]', :message, :value => (@alarm.restore_params || {})['message'], :class =>"form-control" %>
+	  </fieldset>
   </section>
  

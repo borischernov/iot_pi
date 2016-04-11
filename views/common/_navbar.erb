@@ -18,6 +18,9 @@
         <li><a href="/network">Network</a></li>
         <li><a href="/software">Update</a></li> 
       </ul>
+      <% if $gsm_modem %>
+      <p class="navbar-text navbar-right"><%= erb :'common/_rssi' %></p>
+      <% end %>
       <p class="navbar-text navbar-right"><%= Time.now.to_s %></p>
     </div>
   </div>

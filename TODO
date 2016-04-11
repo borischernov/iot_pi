@@ -2,3 +2,5 @@
 - Backup / resore of configuration
 - Firmware upload: make scrollable box for output
 - Implement ESP8266 firmware startup check
+- Software update: check results
+- Implemet PDU mode for rubygsm 

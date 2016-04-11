@@ -11,7 +11,7 @@ class Alarm < ActiveRecord::Base
   scope :enabled, -> { where(enabled: true) }
   scope :failure_checks, -> { where(operation: 3) }
 
-  ACTIONS = ["Set Actuator"]
+  ACTIONS = ["Set Actuator", "Send SMS"]
 
   [:activate, :restore].each do |action|
     belongs_to :"#{action}_actuator", class_name: 'Actuator'
@@ -66,6 +66,8 @@ class Alarm < ActiveRecord::Base
     case self.send("#{action}_action_name")
       when 'Set Actuator'
         self.send("#{action}_actuator").value = p['value']
+      when 'Send SMS'
+        $gsm_modem.send_sms(p['number_to'].to_s.strip, p['message']) if $gsm_modem 
     end
   end
   
@@ -75,8 +77,13 @@ class Alarm < ActiveRecord::Base
       when 'Set Actuator'
         a = self.send("#{action}_actuator")
         errors.add(:"#{action}_actuator", "can't be blank") unless a
-        errors.add(:"#{action}_params", "actuator value can't be blank") unless p && p['value']  
+        errors.add(:"#{action}_params", "actuator value can't be blank") unless p && p['value']
         errors.add(:"#{action}_params", "actuator value is invalid") if p && p['value'] && a && !a.valid_value?(p['value'])   
+      when 'Send SMS'
+        errors.add(:"#{action}_params", "number to can't be blank") unless p && p['number_to']
+        errors.add(:"#{action}_params", "number to should be in international format (+xxxxxxxxx)") unless p && p['number_to'].to_s.strip =~ /^\+\d+$/  
+        errors.add(:"#{action}_params", "message can't be blank") unless p && p['message'].to_s.strip != ""
+        errors.add(:"#{action}_params", "message contains invalid characters") unless p && p['message'].to_s =~ /^[\w\d\s.,-:;!?<>]*$/  
     end
   end
   

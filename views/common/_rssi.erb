@@ -1,0 +1,6 @@
+<% rssi = $gsm_modem.rssi rescue 0 %>
+<ul id="signal-strength">
+	<% 4.times do |n| %>
+    <li <%= 'class="empty"' if rssi < n + 1 %>><div></div></li>
+    <% end %>
+</ul>

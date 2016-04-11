@@ -5,6 +5,8 @@ INCLUDED = caller.any?
 APP_ROOT = File.dirname(__FILE__)
 $LOAD_PATH.unshift(File.join(APP_ROOT,'lib'))
 
+Bundler.setup
+
 unless INCLUDED
   require 'sinatra'
   require "sinatra/config_file"
@@ -28,6 +30,7 @@ unless INCLUDED
   end
 
   require_relative 'lib/scheduler'
+  require_relative 'lib/gsm_modem'
 end
 
 
