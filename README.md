@@ -5,5 +5,5 @@
 - Send sensor readings to [ThingSpeak](https://thingspeak.com) or [EasyIoT Cloud](http://cloud.iot-playground.com/)
 - Control actuators connected locally or via ESP8266
 - Set alarms on sensor values
-..* control actuators
-..* send SMS messages via GSM-modem
+  - control actuators
+  - send SMS messages via GSM-modem
