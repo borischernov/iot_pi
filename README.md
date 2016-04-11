@@ -7,3 +7,4 @@
 - Set alarms on sensor values
   - control actuators
   - send SMS messages via GSM-modem
+- Upload firmware to ESP8266 directly from IoT Pi (https://github.com/borischernov/iot_pi/wiki/Programming-ESP8266)
