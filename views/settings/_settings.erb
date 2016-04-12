@@ -1,0 +1,21 @@
+<% all_settings.each do |setting|
+	if setting[:type] == :group
+%>		
+<div class="panel panel-default">
+  <div class="panel-heading">
+    <h3 class="panel-title"><%= setting[:title]%></h3>
+  </div>
+  <div class="panel-body">
+    <%= erb :'settings/_settings', locals: { all_settings: setting[:settings], settings: settings[setting[:name]], prefix: "#{prefix}[#{setting[:name]}]" } %>
+  </div>
+</div>
+<% else 
+	case setting[:type]
+	  when :string, :integer %>
+			<fieldset class="form-group">
+				<%= label prefix, setting[:name], setting[:title] %><br>
+				<%= input prefix, setting[:name], type: setting[:type] == :string ? :text : :number, value: settings[setting[:name]] || setting[:default], :class =>"form-control" %>
+			</fieldset>
+ <%  end
+   end 
+ end %>
