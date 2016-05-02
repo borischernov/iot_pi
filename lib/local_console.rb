@@ -15,7 +15,7 @@ module LocalConsole
   
   def self.status
     ips = `/sbin/ip addr`.scan(/inet (\d+\.\d+\.\d+.\d+)\//).flatten.reject { |a| a == '127.0.0.1'}.join(" ")
-    " " + ANSI.blue + ips + "\t\t" + Time.now.to_s + ANSI.white + "\n\n"
+    " " + ANSI.white + ips + "\t\t" + Time.now.to_s + "\n\n"
   end
   
   def self.sensors
