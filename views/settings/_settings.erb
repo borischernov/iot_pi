@@ -18,6 +18,11 @@ all_settings.each do |setting|
 				<%= label prefix, setting[:name], setting[:title] %><br>
 				<%= input prefix, setting[:name], type: setting[:type] == :string ? :text : :number, value: settings[setting[:name]] || setting[:default], :class =>"form-control" %>
 			</fieldset>
+	  <% when :boolean %>
+			<fieldset class="form-group">
+				<%= label prefix, setting[:name], setting[:title] %><br>
+				<%= check_box prefix, setting[:name], settings[setting[:name]] || setting[:default] %>
+			</fieldset>
  <%  end
    end 
  end %>

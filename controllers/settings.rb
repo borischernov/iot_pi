@@ -22,6 +22,8 @@ def settings_from_params(all, params)
         params[setting[:name]].to_s.strip == "" ? nil : params[setting[:name]].to_s.strip
       when :integer
         params[setting[:name]].to_s.strip == "" ? nil : params[setting[:name]].to_i
+      when :boolean
+        params[setting[:name]].to_s.strip == "" ? false : true
     end
   end
   s
@@ -41,6 +43,8 @@ def all_settings
     ]},
     {name: :local_sensors, title: 'Local Sensors', type: :group, settings: [
       {name: :poll_interval, title: 'Poll Interval', type: :string },
+      {name: :poll_i2c, title: 'i2c bus number to poll (empty to disable)', type: :string },
+      {name: :poll_1wire, title: 'Poll 1-wire bus', type: :boolean },
     ]},
     {name: :local_actuators, title: 'Local Actuators', type: :group, settings: [
       {name: :gpio_out, title: 'GPIO Out Pins (comma separated)', type: :string },
