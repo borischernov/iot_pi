@@ -18,7 +18,7 @@ class Sensor < ActiveRecord::Base
   end
 
   def alive?
-    self.last_seen_at && self.last_seen_at > 10.minutes.ago
+    self.last_seen_at && self.last_seen_at > (SETTINGS[:sensor_alive_threshold] || 10).minutes.ago
   end
 
   def last_formatted_value
@@ -36,6 +36,17 @@ class Sensor < ActiveRecord::Base
   
   def has_ext_service?
       self.ext_service && self.ext_service.to_s != "None"
+  end
+  
+  EXPORTED_ATTRS = [:ident, :name, :sensor_type, :ext_service, :ext_service_ident] 
+  def to_hash
+    self.attributes.select { |k,v| EXPORTED_ATTRS.include?(k) }
+  end
+  
+  def self.from_hash(h)
+    ident = h.delete(:ident)
+    record = self.where(ident: ident).first || self.new(ident: ident)
+    record.update_attributes(h)
   end
   
   def self.create_reading(ident, value, tstamp = Time.now, sensor_type = nil, address = nil)

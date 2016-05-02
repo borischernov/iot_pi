@@ -32,6 +32,7 @@ def all_settings
     {name: :local_console, title: 'Refresh interval for local console (empty to disable)', type: :string},
     {name: :readings_retention_days, title: 'Retention interval for sensor readings, days', type: :integer},
     {name: :network_reset_gpio, title: 'GPIO Pin for Network Settings Reset Switch', type: :integer},
+    {name: :sensor_alive_threshold, title: 'Maximum time between sensor readings (in minutes) when sensor is treated as alive', type: :integer},
     {name: :esp8266, title: 'ESP8266 connection settings', type: :group, settings: [
       {name: :serial_port, title: 'Serial Port', type: :string },
       {name: :serial_speed, title: 'Baudrate', type: :integer },
