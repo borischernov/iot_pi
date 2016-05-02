@@ -1,4 +1,6 @@
-<% all_settings.each do |setting|
+<%
+settings ||= {} 
+all_settings.each do |setting|
 	if setting[:type] == :group
 %>		
 <div class="panel panel-default">
