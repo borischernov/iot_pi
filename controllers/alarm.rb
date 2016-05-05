@@ -20,12 +20,13 @@ get '/alarm/edit/:id' do
 end
 
 post '/alarm/update/:id' do
-puts params.inspect  
   @alarm = Alarm.find(params[:id])
   ok = @alarm.update_attributes(params[:alarm])
-puts @alarm.inspect  
   return redirect to('/alarms') if ok 
   erb :'alarm/edit'
 end
 
-
+post '/alarm/delete/:id' do
+  Alarm.find(params[:id]).destroy
+  redirect to('/alarms')
+end
