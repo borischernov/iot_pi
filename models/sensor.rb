@@ -2,7 +2,7 @@ class Sensor < ActiveRecord::Base
   has_many :sensor_readings, dependent: :delete_all
   has_many :alarms, dependent: :destroy
 
-  enum  sensor_type: [ "Temperature", "Relative Humidity" ]
+  enum  sensor_type: [ "Temperature", "Relative Humidity", "Voltage"]
   enum  ext_service: ["None", "EasyIoT Cloud", "Thingspeak"]
 
   validates :ident, presence: true, uniqueness: true
@@ -11,7 +11,6 @@ class Sensor < ActiveRecord::Base
   after_update do
     self.alarms.enabled.each(&:check) rescue nil if self.last_value_changed? 
   end
-
 
   def to_s
     self.name || self.ident
@@ -29,6 +28,8 @@ class Sensor < ActiveRecord::Base
         "%.1f &deg;C" % v
       when 'Relative Humidity'
         "%.1f %" % v
+      when 'Voltage'
+        "%.1f V" % v
       else
         v.to_s
     end
