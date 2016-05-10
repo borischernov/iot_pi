@@ -61,7 +61,7 @@ class ADS1015
     @address = address
   end
   
-  def confugure(cfg_value)
+  def configure(cfg_value)
     @cfg = cfg_value
     self.write_register(REG_CONFIG, cfg_value)
   end
