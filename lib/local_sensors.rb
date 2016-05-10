@@ -43,7 +43,7 @@ module LocalSensors
     begin
       # Check for AM2320 sensor
       addr = 0x5C  # AM2320 i2c address
-      bus = ::I2C.create("/dev/i2c-#{SETTINGS[:poll_i2c]}")
+      bus = ::I2C.create("/dev/i2c-#{SETTINGS[:local_sensors][:poll_i2c]}")
       
       bus.write(addr) rescue nil        # first write is just to wake the sensor up, it isn't ack'ed and raises an exception
       sleep(0.001)                      # wait the sensor to wake up
@@ -74,9 +74,9 @@ module LocalSensors
   
   def self.poll_ads1015
     begin
-      bus = I2C.create("/dev/i2c-#{SETTINGS[:poll_i2c]}")
+      bus = I2C.create("/dev/i2c-#{SETTINGS[:local_sensors][:poll_i2c]}")
       adc = ADS1015.new(bus, 0x48)
-      adc.configure(CFG_MUX_AIN0 | CFG_PGA_4_096 | CFG_MODE_CONT | CFG_DR_128 | CFG_COMP_TRAD | CFG_CMP_DISABLE)
+      adc.configure(ADS1015::CFG_MUX_AIN0 | ADS1015::CFG_PGA_4_096 | ADS1015::CFG_MODE_CONT | ADS1015::CFG_DR_128 | ADS1015::CFG_COMP_TRAD | ADS1015::CFG_CMP_DISABLE)
       4.times do |chan|
         d = adc.read_channel(chan)
         v = d.to_f * 4.096 / 0x8000

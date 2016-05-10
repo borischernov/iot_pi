@@ -63,13 +63,13 @@ class ADS1015
   
   def confugure(cfg_value)
     @cfg = cfg_value
-    self.write_register(ADS1015.REG_CONFIG, cfg_value)
+    self.write_register(REG_CONFIG, cfg_value)
   end
 
   def read_channel(channel)
     @cfg &= ~CFG_MUX_MASK
-    self.write_register(ADS1015.REG_CONFIG, @cfg | CFG_MUX_AIN0 | (channel << 12)) 
-    self.read_register(ADS1015.REG_CONVERSION)
+    self.write_register(REG_CONFIG, @cfg | CFG_MUX_AIN0 | (channel << 12)) 
+    self.read_register(REG_CONVERSION)
   end
   
   def write_register(reg, value)
