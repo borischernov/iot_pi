@@ -78,7 +78,7 @@ module LocalSensors
       adc = ADS1015.new(bus, 0x48)
       adc.configure(CFG_MUX_AIN0 | CFG_PGA_4_096 | CFG_MODE_CONT | CFG_DR_128 | CFG_COMP_TRAD | CFG_CMP_DISABLE)
       4.times do |chan|
-        d = read_channel(chan)
+        d = adc.read_channel(chan)
         v = d.to_f * 4.096 / 0x8000
 
         Sensor.create_reading("ads1015-#{chan}-local-v", v, Time.now, 'Voltage')

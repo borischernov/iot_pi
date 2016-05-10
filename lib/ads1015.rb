@@ -68,7 +68,7 @@ class ADS1015
 
   def read_channel(channel)
     @cfg &= ~CFG_MUX_MASK
-    self.write_register(@cfg | CFG_MUX_AIN0 | (channel << 12)) 
+    self.write_register(ADS1015.REG_CONFIG, @cfg | CFG_MUX_AIN0 | (channel << 12)) 
     self.read_register(ADS1015.REG_CONVERSION)
   end
   
