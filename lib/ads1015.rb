@@ -31,8 +31,8 @@ class ADS1015
   CFG_PGA_0_512        = 0x0800     # FS = ±0.512 V
   CFG_PGA_0_256        = 0x0A00     # FS = ±0.256 V
   
-  CFG_MODE_CONT        = 0x0100     # Continuous conversion mode
-  CFG_MODE_SINGLE      = 0x0000     # Power-down single-shot mode (default)
+  CFG_MODE_CONT        = 0x0000     # Continuous conversion mode
+  CFG_MODE_SINGLE      = 0x0100     # Power-down single-shot mode (default)
   
   CFG_DR_128           = 0x0000     # 128 SPS
   CFG_DR_250           = 0x0020     # 250 SPS
