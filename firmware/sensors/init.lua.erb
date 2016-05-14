@@ -28,17 +28,12 @@ function str_addr(addr)
 end
 
 function send_sensors_data()
-    t = require("ds18b20")
-    
-    gpio0 = 3
-    t.setup(gpio0)
-
-    addrs = t.addrs()
+    addrs = ds18b20.addrs()
     if (addrs ~= nil) then
       data = ""
       print("Total DS18B20 sensors: "..table.getn(addrs))
       for i,addr in ipairs(addrs) do
-        temp = t.read(addr)
+        temp = ds18b20.read(addr)
         straddr = str_addr(addr)
         print(string.format("%s: Temperature: %s degrees C", straddr, temp))
         if (temp ~= 85 and temp ~= -127) then 
@@ -60,6 +55,18 @@ function send_sensors_data()
         
     send_data(data)
 end
+<% when 'ads1015' %>
+-----------------------------------------------------------------------------------------
+function send_sensors_data()
+    rh, t = am2320.read()
+    print(string.format("RH: %s%%", rh / 10))
+    print(string.format("Temperature: %s degrees C", t / 10))
+    
+    mac = wifi.sta.getmac()
+    data =  mac .. '-rh%7C' .. (rh / 10) .. "%7C" .. mac .. '-t%7C' .. (t / 10)
+        
+    send_data(data)
+end
 <% else %>
 <% raise "Unknown sensor type: #{@params[:sensor_type]}" %>
 <% end %>
@@ -69,10 +76,18 @@ wifi.setmode(wifi.STATION)
 wifi.sta.config("<%= @params['ssid'] %>","<%= @params['password'] %>")
 wifi.sta.connect()
 
-<% if @params['sensor_type'] == 'am2320' %>
 gpio0 = 3
 gpio2 = 4
+
+<% case @params['sensor_type'] 
+   when 'ds18b20' %>
+ds18b20 = require("ds18b20")
+ds18b20.setup(gpio0)
+<% when 'am2320' %>
 am2320.init(gpio0, gpio2)
+<% when 'ads1015' %>
+ads1015 = require("ads1015")
+ads1015.setup(gpio0, gpio2, 0x48)
 <% end %> 
 
 tmr.alarm(1, 500, tmr.ALARM_AUTO, function() 

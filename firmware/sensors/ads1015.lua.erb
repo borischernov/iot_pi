@@ -1,0 +1,56 @@
+--------------------------------------------------------------------------------
+-- ADS1015 one wire module for NODEMCU
+-- 2016/05/16 Boris Chernov <icemedved@gmail.com>
+--------------------------------------------------------------------------------
+
+-- Set module name as parameter of require
+local modname = ...
+local M = {}
+_G[modname] = M
+
+--------------------------------------------------------------------------------
+-- Local used variables
+--------------------------------------------------------------------------------
+local slave_addr = nil
+
+--------------------------------------------------------------------------------
+-- Local used modules
+--------------------------------------------------------------------------------
+-- I2C module
+local i2c = i2c
+-- Math module
+local math = math
+-- Limited to local environment
+setfenv(1,M)
+
+--------------------------------------------------------------------------------
+-- Implementation
+--------------------------------------------------------------------------------
+function setup(sda, scl, saddr)
+    slave_addr = saddr
+    i2c.setup(0, sda, scl, i2c.SLOW)
+end
+
+function write_register(reg_addr, data)
+    i2c.start(0)
+    i2c.address(0, slave_addr, i2c.TRANSMITTER)
+    i2c.write(0, reg_addr)
+    i2c.write(0, math.floor(data / 256))
+    i2c.write(0, data % 256)
+    i2c.stop(0)
+end
+
+function read_register(reg_addr)
+    i2c.start(0)
+    i2c.address(0, slave_addr, i2c.TRANSMITTER)
+    i2c.write(0, reg_addr)
+    i2c.stop(0)
+    i2c.start(0)
+    i2c.address(0, slave_addr, i2c.RECEIVER)
+    d = i2c.read(0, 2)
+    i2c.stop(0)
+    return d:byte(1) * 256 + d:byte(2)
+end
+
+-- Return module table
+return M
