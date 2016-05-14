@@ -1,6 +1,6 @@
 {
   name: "Misc sensors",
-  files: ['ds18b20.lua', 'init.lua'],
+  files: ['ds18b20.lua', 'ads1015.lua', 'init.lua'],
   params: [
     {name: 'sensor_type', title: 'Sensor Type', type: :select, options: [
       ['ds18b20', 'DS18B20 Temperature'],
