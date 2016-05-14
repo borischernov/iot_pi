@@ -58,13 +58,17 @@ end
 <% when 'ads1015' %>
 -----------------------------------------------------------------------------------------
 function send_sensors_data()
-    rh, t = am2320.read()
-    print(string.format("RH: %s%%", rh / 10))
-    print(string.format("Temperature: %s degrees C", t / 10))
-    
     mac = wifi.sta.getmac()
-    data =  mac .. '-rh%7C' .. (rh / 10) .. "%7C" .. mac .. '-t%7C' .. (t / 10)
-        
+    data = ''
+
+    for i=0,3 do
+    	ads1015.write_register(1, 0x0483 + 0x1000 * i)
+    	tmr.delay(1000)
+    	v = ads1015.read_register(0) * 4.096 / 0x8000
+	    print(string.format("Channel %d, Voltage %.3f", i, v))
+    	data = data .. string.format("%s-%d-v%%7C%.3f%%7C", mac, i, v)
+    end
+
     send_data(data)
 end
 <% else %>
