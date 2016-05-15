@@ -13,6 +13,8 @@ unless INCLUDED
   require 'sinatra/form_helpers'
 
   config_file File.join(APP_ROOT, 'settings', 'config.yml')
+  
+  set :static_cache_control, [:public, max_age: 86400]
 end
 
 require_relative 'models/init'
