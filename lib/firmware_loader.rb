@@ -2,11 +2,7 @@
 # Class for programming ESP8266
 #
 
-begin 
-  require 'wiringpi'
-rescue LoadError
-end
-
+require 'serialport'
 require 'gpio'
 
 class FirmwareLoader
@@ -53,7 +49,7 @@ class FirmwareLoader
   end
   
   def send_file(file_name, file_data)
-    @s = WiringPi::Serial.new(@port, @speed)
+    @s = SerialPort.new(@port, @speed)
     serial_line("file.remove(\"#{file_name}\");")
     serial_line("file.open(\"#{file_name}\",\"w+\");")
     serial_line("w = file.writeline;")
@@ -85,21 +81,19 @@ class FirmwareLoader
   private
   
   def serial_line(line)
-    serial_read(false)
-    @s.serial_puts("#{line}\n")
-    status(serial_read)
+    @s.flush_input
+    @s.puts(line)
+    status(serial_read_line)
+    serial_read_line
   end
   
-  def serial_read(line = true)
+  def serial_read_line
     str = ""
-    loop do
-      c = @s.serial_get_char
-      break if c <= 0
-      chr = c.chr
-      break if chr == (line ? "\n" : ">")
-      str += chr
+    20.times do
+      break if str = @s.gets
+      sleep(0.1)      
     end
-    str
+    str.strip
   end
   
   def status(str)
