@@ -13,7 +13,7 @@ class Sensor < ActiveRecord::Base
   end
 
   def to_s
-    self.name || self.ident
+    self.name.to_s.strip == "" ? self.ident : self.name
   end
 
   def alive?
