@@ -57,7 +57,7 @@ class FirmwareLoader
       serial_line("w([[#{line.chomp}]]);")
     end
     serial_line("file.close();")
-    @s.serial_close
+    @s.close
   end
   
   def send_firmware(fw_dir, files, params)
