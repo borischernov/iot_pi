@@ -56,6 +56,8 @@ class Sensor < ActiveRecord::Base
     sensor = Sensor.where(ident: ident).first_or_create do |s|
       s.sensor_type = sensor_type
     end
+
+    value = value * sensor.factor + sensor.offset
     
     sensor.update_attributes(last_seen_at: Time.now, address: address, last_value: value)
     sensor.sensor_readings.create(value: value, timestamp: tstamp)
