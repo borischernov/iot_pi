@@ -50,8 +50,14 @@ class Sensor < ActiveRecord::Base
     record.update_attributes(h)
   end
   
+  def self.guess_type(ident)
+    return 'Relative Humidity' if ident =~ /\-rh$/
+    return 'Voltage' if ident =~ /\-v$/
+    'Temperature'
+  end
+  
   def self.create_reading(ident, value, tstamp = Time.now, sensor_type = nil, address = nil)
-    sensor_type ||= ident =~ /\-rh$/ ? 'Relative Humidity' : 'Temperature'
+    sensor_type ||= self.guess_type(ident)
 
     sensor = Sensor.where(ident: ident).first_or_create do |s|
       s.sensor_type = sensor_type
