@@ -14,6 +14,5 @@ rescue
 end
 
 require_relative 'sensor'
-require_relative 'sensor_reading'
 require_relative 'actuator'
 require_relative 'alarm'
